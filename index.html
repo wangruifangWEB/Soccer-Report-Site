@@ -31,37 +31,58 @@
         $(document).ready(function() {
             $.getJSON("config.json", function(config) {
                 var host = config.host;
-                var tasks = config.tasks;
 
                 $(".vis").map(function() {
                     var id = $(this).attr('id');
 
-                    $.getJSON(`http://${host}/retrieve/${id}`, function(response) {
-                        var list = response.data;
-                        var options = "";
-                        if (list.length > 0) {
-                            for (var i = 0; i < list.length; i++) {
-                                options += `<option value="${list[i]}">${list[i]}</option>`;
-                            }
+                    var args = [];
 
-                            $(`#${id} > select`).html(options);
-                            $(`#${id} > select > option:first-of-type`).prop("selected", true);
-                        }
+                    $(`#${id} > select`).map(function() {
+                        var argName = $(this).attr("data-arg");
+                        args.push(argName);
+
+                        $.getJSON(`http://${host}/${id}/${argName}`, response => {
+                            var list = response.data;
+                            var options = "";
+                            if (list.length > 0) {
+                                for (var i = 0; i < list.length; i++) {
+                                    options += `<option value="${list[i]}">${list[i]}</option>`;
+                                }
+
+                                $(this).html(options);
+                                $(this).children(`option:first-of-type`).prop("selected", true);
+                            }
+                        });
                     });
 
                     $.getJSON(`vis/${id}.json`, function(response) {
                         var vlSpec = response;
 
                         $(`#${id} > select`).change(function() {
-                            var argName = tasks[id].arg;
-                            $.getJSON(`http://${host}/run/${id}?${argName}=${encodeURI($(this).val())}`, function(response) {
+                            var argStr = "";
+                            for (i = 0; i < args.length; i++) {
+                                var key = args[i];
+                                var value = $(`#${id} > select[data-arg=${key}]`).val();
+
+                                if (i > 0) {
+                                    argStr += '&';
+                                }
+                                if (Array.isArray(value)) {
+                                    argStr += `${key}=` + value.join(`&${key}=`);
+                                }
+                                else {
+                                    argStr += `${key}=${encodeURI(value)}`;
+                                }
+                            }
+
+                            $.getJSON(`http://${host}/${id}/func?${argStr}`, function(response) {
                                 vlSpec.data.values = response.data;
                                 visualize(`#${id} > div`, vlSpec);
                             });
                         });
 
                         setTimeout(function() {
-                            $(`#${id} > select`).trigger("change");
+                            $(`#${id} > select:first-of-type`).trigger("change");
                         }, 200);
                     });
                 });
@@ -78,12 +99,14 @@
 <body>
     <div style="max-width:1000px">
         <div class="vis" id="opposition">
-            <select></select>
+            <select data-arg="measure"></select>
+            <select data-arg="opponent"></select>
             <div></div>
         </div>
 
         <div class="vis" id="player_analysis_graph">
-            <select></select>
+            <select data-arg="measure"></select>
+            <select data-arg="players" multiple></select>
             <div></div>
         </div>
     </div>

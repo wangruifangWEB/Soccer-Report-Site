@@ -1,11 +1,3 @@
 {
-    "host": "gena-lab.cmns.sfu.ca:9999",
-    "tasks": {
-        "opposition": {
-            "arg": "opponent"
-        },
-        "player_analysis_graph": {
-            "arg": "measure"
-        }
-    }
+    "host": "gena-lab.cmns.sfu.ca:9999"
 }
