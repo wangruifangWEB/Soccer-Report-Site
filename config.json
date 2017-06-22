@@ -1,0 +1,11 @@
+{
+    "host": "localhost:9999",
+    "tasks": {
+        "opposition": {
+            "arg": "opponent"
+        },
+        "player_analysis_graph": {
+            "arg": "measure"
+        }
+    }
+}

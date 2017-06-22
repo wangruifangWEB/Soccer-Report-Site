@@ -1,0 +1,16 @@
+{
+    "data": {
+        "values": null
+    },
+    "mark": "bar",
+    "encoding": {
+        "x": {
+            "field": "Player", "type": "nominal", "sort": false,
+            "axis": {"title": ""}
+        },
+        "y": {
+            "field": "Total Shots", "type": "quantitative",
+            "axis": {"title": "", "format": "d"}
+        }
+    }
+}

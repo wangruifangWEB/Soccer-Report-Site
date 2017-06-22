@@ -1,0 +1,18 @@
+{
+  "name": "soccer-report-site",
+  "version": "0.0.0",
+  "authors": [
+    "Chuancong Gao <chuancong@gmail.com>"
+  ],
+  "private": true,
+  "dependencies": {
+    "bootstrap": "3.*.*",
+    "fontawesome": "*",
+    "jquery": "*",
+    "d3": "3.*.*",
+    "vega": "*",
+    "vega-lite": "*",
+    "vega-embed": "*",
+    "underscore": "^1.8.3"
+  }
+}
