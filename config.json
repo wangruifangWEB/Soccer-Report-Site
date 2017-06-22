@@ -1,5 +1,5 @@
 {
-    "host": "localhost:9999",
+    "host": "gena-lab.cmns.sfu.ca:9999",
     "tasks": {
         "opposition": {
             "arg": "opponent"
