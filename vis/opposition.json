@@ -9,7 +9,7 @@
             "axis": {"title": ""}
         },
         "y": {
-            "field": "Total Shots", "type": "quantitative",
+            "field": "Score", "type": "quantitative",
             "axis": {"title": "", "format": "d"}
         }
     }
