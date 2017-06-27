@@ -5,10 +5,10 @@
     "mark": "bar",
     "encoding": {
         "x": {
-            "field": "Player", "type": "nominal", "sort": false
+            "field": "Opposition Ranking", "type": "nominal", "sort": false
         },
         "y": {
-            "field": "Total Shots", "type": "quantitative",
+            "field": "Win", "type": "quantitative",
             "axis": {"format": "d"}
         }
     }

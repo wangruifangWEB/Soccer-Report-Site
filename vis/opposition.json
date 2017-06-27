@@ -5,12 +5,11 @@
     "mark": "bar",
     "encoding": {
         "x": {
-            "field": "Match ID", "type": "nominal", "sort": false,
-            "axis": {"title": ""}
+            "field": "Match ID", "type": "nominal", "sort": false
         },
         "y": {
             "field": "Score", "type": "quantitative",
-            "axis": {"title": "", "format": "d"}
+            "axis": {"format": "d"}
         }
     }
 }

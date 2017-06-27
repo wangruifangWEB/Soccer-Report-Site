@@ -15,6 +15,10 @@
     <script src="static/js/vega-lite.min.js"></script>
     <script src="static/js/vega-embed.min.js"></script>
 
+    <script src="static/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/dataTables.bootstrap.min.css">
+    <script src="static/js/dataTables.bootstrap.min.js"></script>
+
     <script type="text/javascript">
         function encodeURI(part) {
             return encodeURIComponent(part).replace(/%20/g, "+");
@@ -35,13 +39,21 @@
                 $(".vis").map(function() {
                     var id = $(this).attr('id');
 
+                    var dataID = id;
+                    if ($(this).attr('data-id') !== undefined) {
+                        dataID = $(this).attr('data-id');
+                    }
+
                     var args = [];
+                    var realArgs = [];
 
                     $(`#${id} > select`).map(function() {
                         var argName = $(this).attr("data-arg");
                         args.push(argName);
+                        var realArgName = $(this).attr("data-realarg");
+                        realArgs.push(realArgName !== undefined ? realArgName : argName);
 
-                        $.getJSON(`http://${host}/${id}/${argName}`, response => {
+                        $.getJSON(`http://${host}/${dataID}/${argName}`, response => {
                             var list = response.data;
                             var options = "";
                             if (list.length > 0) {
@@ -55,36 +67,74 @@
                         });
                     });
 
-                    $.getJSON(`vis/${id}.json`, function(response) {
-                        var vlSpec = response;
+                    function getArgStr() {
+                        var argStr = "";
+                        for (i = 0; i < args.length; i++) {
+                            var key = args[i];
+                            var realKey = realArgs[i];
+                            var value = $(`#${id} > select[data-arg=${key}]`).val();
 
-                        $(`#${id} > select`).change(function() {
-                            var argStr = "";
-                            for (i = 0; i < args.length; i++) {
-                                var key = args[i];
-                                var value = $(`#${id} > select[data-arg=${key}]`).val();
-
-                                if (i > 0) {
-                                    argStr += '&';
-                                }
-                                if (Array.isArray(value)) {
-                                    argStr += `${key}=` + value.join(`&${key}=`);
-                                }
-                                else {
-                                    argStr += `${key}=${encodeURI(value)}`;
-                                }
+                            if (i > 0) {
+                                argStr += '&';
                             }
+                            if (Array.isArray(value)) {
+                                argStr += `${realKey}=` + value.join(`&${realKey}=`);
+                            }
+                            else {
+                                argStr += `${realKey}=${encodeURI(value)}`;
+                            }
+                        }
 
-                            $.getJSON(`http://${host}/${id}/func?${argStr}`, function(response) {
+                        return argStr
+                    }
+
+                    function getAction(func) {
+                        return () => $.getJSON(`http://${host}/${dataID}/func?${getArgStr()}`, func);
+                    }
+
+                    var action;
+
+                    if ($(this).hasClass("vis-figure")) {
+                        $.getJSON(`vis/${id}.json`, function(response) {
+                            var vlSpec = response;
+
+                            action = getAction(function(response) {
                                 vlSpec.data.values = response.data;
                                 visualize(`#${id} > div`, vlSpec);
                             });
+
+                            $(`#${id} > select`).change(action);
+                            setTimeout(action, 200);
+                        });
+                    }
+                    else if ($(this).hasClass("vis-table")) {
+                        var table = null;
+
+                        action = getAction(function(response) {
+                            var columns = [];
+                            var keys = Object.keys(response.data[0]);
+                            for (var i = 0; i < keys.length; i++) {
+                                columns.push({data: keys[i], title: keys[i]});
+                            }
+                            if (table) {
+                                table.destroy();
+                                $(`#${id} > table`).empty();
+                            }
+                            table = $(`#${id} > table`).DataTable({
+                                "data": response.data,
+                                "columns": columns,
+
+                                "displayLength": -1,
+                                "paging": false,
+                                "ordering": false,
+                                "info": false,
+                                "searching": false
+                            })
                         });
 
-                        setTimeout(function() {
-                            $(`#${id} > select:first-of-type`).trigger("change");
-                        }, 200);
-                    });
+                        $(`#${id} > select`).change(action);
+                        setTimeout(action, 200);
+                    }
                 });
             });
         });
@@ -97,17 +147,51 @@
     </style>
 </head>
 <body>
-    <div style="max-width:1000px">
-        <div class="vis" id="opposition">
+    <div class="container" style="max-width:1000px">
+        <div class="vis vis-figure" id="opposition">
+            <h3>Opposition</h3>
             <select data-arg="measure"></select>
             <select data-arg="opponent"></select>
             <div></div>
         </div>
 
-        <div class="vis" id="player_analysis_graph">
+        <div class="vis vis-figure" id="player_analysis_graph">
+            <h3>Player Analysis Graph</h3>
             <select data-arg="measure"></select>
             <select data-arg="players" multiple></select>
             <div></div>
+        </div>
+
+        <div class="vis vis-figure" id="results_graph">
+            <h3>Results Graph</h3>
+            <select data-arg="year"></select>
+            <div></div>
+        </div>
+
+        <div class="vis vis-figure" id="results_table" data-id="results_graph">
+            <h3>Results Table</h3>
+            <div></div>
+        </div>
+
+        <div class="vis vis-figure" id="pass_completion_process" data-id="pass_completion">
+            <h3>Pass Completion</h3>
+            <select data-arg="process_measure" data-realarg="measure"></select>
+            <select data-arg="player"></select>
+            <div></div>
+        </div>
+
+        <div class="vis vis-figure" id="pass_completion_control" data-id="pass_completion">
+            <h3>Pass Completion</h3>
+            <select data-arg="control_measure" data-realarg="measure"></select>
+            <select data-arg="player"></select>
+            <div></div>
+        </div>
+
+        <div class="vis vis-table" id="player_table">
+            <h3>Player Table</h3>
+            <select data-arg="minutes"></select>
+            <select data-arg="podium"></select>
+            <table class="table"></table>
         </div>
     </div>
 </body>
