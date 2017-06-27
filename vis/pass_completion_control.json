@@ -5,7 +5,7 @@
     "mark": "bar",
     "encoding": {
         "x": {
-            "field": "Match Identifier", "type": "nominal", "sort": false
+            "field": "Match Identfier", "type": "nominal", "sort": false
         },
         "y": {
             "field": "score", "type": "quantitative",
