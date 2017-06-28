@@ -1,15 +1,14 @@
 {
-    "data": {
-        "values": null
-    },
-    "mark": "bar",
-    "encoding": {
-        "x": {
-            "field": "Match Identfier", "type": "nominal", "sort": false
+    "spec": {
+        "xAxis": {
+            "data": []
         },
-        "y": {
-            "field": "score", "type": "quantitative",
-            "axis": {"format": "d"}
-        }
-    }
+        "yAxis": {},
+        "series": [{
+            "type": "bar",
+            "data": []
+        }]
+    },
+    "xField": "Match Identfier",
+    "yField": "score"
 }
