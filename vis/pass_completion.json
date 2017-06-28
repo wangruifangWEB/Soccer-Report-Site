@@ -1,14 +1,10 @@
 {
     "spec": {
-        "xAxis": {
-            "data": []
-        },
+        "xAxis": {},
         "yAxis": {},
-        "series": [{
-            "type": "bar",
-            "data": []
-        }]
+        "series": []
     },
     "xField": "Match Identfier",
-    "yField": "score"
+    "yField": "score",
+    "type": "bar"
 }

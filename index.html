@@ -30,15 +30,56 @@
         function visualize(selector, spec, data, flag) {
             if (flag) {
                 var chart = echarts.init($(selector)[0]);
-                chart.setOption(spec.spec);
-                chart.setOption({
-                    xAxis: {
+                var ecSpec = spec.spec;
+                var type = spec.type;
+                var stack = spec.stack;
+
+                if ("columnField" in spec) {
+                    ecSpec.xAxis = {
                         data: _.map(data, r => r[spec.xField])
-                    },
-                    series: [{
+                    };
+
+                    ecSpec.series = _.map(
+                        _.groupBy(data, r => r[spec.columnField]),
+                        (g, k) => {
+                            return {
+                                name: k,
+                                type: type,
+                                data: _.map(g, r => r[spec.yField]),
+                                stack: stack
+                            };
+                        }
+                    );
+                }
+                else if ("rowField" in spec) {
+                    ecSpec.yAxis = {
                         data: _.map(data, r => r[spec.yField])
-                    }]
-                });
+                    };
+
+                    ecSpec.series = _.map(
+                        _.groupBy(data, r => r[spec.rowField]),
+                        (g, k) => {
+                            return {
+                                name: k,
+                                type: type,
+                                data: _.map(g, r => r[spec.xField]),
+                                stack: stack
+                            };
+                        }
+                    );
+                }
+                else {
+                    ecSpec.xAxis = {
+                        data: _.map(data, r => r[spec.xField])
+                    };
+
+                    ecSpec.series = [{
+                        data: _.map(data, r => r[spec.yField]),
+                        type: type,
+                    }];
+                }
+
+                chart.setOption(ecSpec);
             }
             else {
                 spec.data.values = data;
@@ -182,7 +223,7 @@
 </head>
 <body>
     <div class="container" style="max-width:1000px">
-        <div class="vis vis-figure" id="opposition">
+        <div class="vis vis-figure vis-echarts" id="opposition">
             <h3>Opposition</h3>
             Measure
             <select data-arg="measure" data-default="6"></select>
@@ -243,7 +284,7 @@
             <div></div>
         </div>
 
-        <div class="vis vis-figure" id="results_graph">
+        <div class="vis vis-figure vis-echarts" id="results_graph">
             <h3>Results Graph</h3>
             Year
             <select data-arg="year"></select>

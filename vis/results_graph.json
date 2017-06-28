@@ -1,18 +1,12 @@
 {
-    "data": {
-        "values": null
+    "spec": {
+        "xAxis": {},
+        "yAxis": {},
+        "series": []
     },
-    "mark": "bar",
-    "encoding": {
-        "y": {
-            "field": "Opposition Ranking", "type": "nominal", "sort": false
-        },
-        "x": {
-            "field": "Value", "type": "quantitative",
-            "axis": {"format": "d"}
-        },
-        "color": {
-            "field": "Key", "type": "nominal"
-        }
-    }
+    "xField": "Value",
+    "yField": "Opposition Ranking",
+    "rowField": "Key",
+    "type": "bar",
+    "stack": true
 }

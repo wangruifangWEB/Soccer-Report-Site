@@ -1,18 +1,11 @@
 {
-    "data": {
-        "values": null
+    "spec": {
+        "xAxis": {},
+        "yAxis": {},
+        "series": []
     },
-    "mark": "bar",
-    "encoding": {
-        "column": {
-            "field": "Match ID", "type": "nominal", "sort": false
-        },
-        "x": {
-            "field": "Nation", "type": "nominal", "sort": false
-        },
-        "y": {
-            "field": "Score", "type": "quantitative",
-            "axis": {"format": "d"}
-        }
-    }
+    "xField": "Match ID",
+    "yField": "Score",
+    "columnField": "Nation",
+    "type": "bar"
 }
