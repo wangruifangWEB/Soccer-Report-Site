@@ -4,12 +4,15 @@
     },
     "mark": "bar",
     "encoding": {
-        "x": {
+        "y": {
             "field": "Opposition Ranking", "type": "nominal", "sort": false
         },
-        "y": {
-            "field": "Win", "type": "quantitative",
+        "x": {
+            "field": "Value", "type": "quantitative",
             "axis": {"format": "d"}
+        },
+        "color": {
+            "field": "Key", "type": "nominal"
         }
     }
 }

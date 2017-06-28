@@ -4,8 +4,11 @@
     },
     "mark": "bar",
     "encoding": {
-        "x": {
+        "column": {
             "field": "Match ID", "type": "nominal", "sort": false
+        },
+        "x": {
+            "field": "Nation", "type": "nominal", "sort": false
         },
         "y": {
             "field": "Score", "type": "quantitative",

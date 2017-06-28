@@ -8,7 +8,7 @@
             "field": "Player", "type": "nominal", "sort": false
         },
         "y": {
-            "field": "Total Shots", "type": "quantitative",
+            "field": "score", "type": "quantitative",
             "axis": {"format": "d"}
         }
     }

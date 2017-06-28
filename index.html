@@ -95,7 +95,7 @@
                     var action;
 
                     if ($(this).hasClass("vis-figure")) {
-                        $.getJSON(`vis/${id}.json`, function(response) {
+                        $.getJSON(`vis/${dataID}.json`, function(response) {
                             var vlSpec = response;
 
                             action = getAction(function(response) {
@@ -150,46 +150,120 @@
     <div class="container" style="max-width:1000px">
         <div class="vis vis-figure" id="opposition">
             <h3>Opposition</h3>
+            Measure
             <select data-arg="measure"></select>
+            Opponent
             <select data-arg="opponent"></select>
             <div></div>
         </div>
 
-        <div class="vis vis-figure" id="player_analysis_graph">
-            <h3>Player Analysis Graph</h3>
-            <select data-arg="measure"></select>
+        <div class="vis vis-figure" id="player_analysis_graph_control" data-id="player_analysis_graph">
+            <h3>Player Analysis Graph - Control</h3>
+            Control Measure
+            <select data-arg="control_measure" data-realarg="measure"></select>
+            Minutes
+            <select data-arg="minutes"></select>
+            Podium
+            <select data-arg="podium"></select>
+            Players
+            <select data-arg="players" multiple></select>
+            <div></div>
+        </div>
+
+        <div class="vis vis-figure" id="player_analysis_graph_process" data-id="player_analysis_graph">
+            <h3>Player Analysis Graph - Process</h3>
+            Process Measure
+            <select data-arg="process_measure" data-realarg="measure"></select>
+            Minutes
+            <select data-arg="minutes"></select>
+            Podium
+            <select data-arg="podium"></select>
+            Players
+            <select data-arg="players" multiple></select>
+            <div></div>
+        </div>
+
+        <div class="vis vis-figure" id="player_analysis_graph_outcome" data-id="player_analysis_graph">
+            <h3>Player Analysis Graph - Outcome</h3>
+            Outcome Measure
+            <select data-arg="outcome_measure" data-realarg="measure"></select>
+            Minutes
+            <select data-arg="minutes"></select>
+            Podium
+            <select data-arg="podium"></select>
+            Players
+            <select data-arg="players" multiple></select>
+            <div></div>
+        </div>
+
+        <div class="vis vis-figure" id="player_analysis_graph_final" data-id="player_analysis_graph">
+            <h3>Player Analysis Graph - Final Acts Quality</h3>
+            Final Acts Quality Measure
+            <select data-arg="final_measure" data-realarg="measure"></select>
+            Minutes
+            <select data-arg="minutes"></select>
+            Podium
+            <select data-arg="podium"></select>
+            Players
             <select data-arg="players" multiple></select>
             <div></div>
         </div>
 
         <div class="vis vis-figure" id="results_graph">
             <h3>Results Graph</h3>
+            Year
             <select data-arg="year"></select>
+            <select data-arg="format_figure" data-realarg="format" style="display: none"></select>
             <div></div>
         </div>
 
-        <div class="vis vis-figure" id="results_table" data-id="results_graph">
+        <div class="vis vis-table" id="results_table" data-id="results_graph">
             <h3>Results Table</h3>
-            <div></div>
+            <table class="table"></table>
+            <select data-arg="format_table" data-realarg="format" style="display: none"></select>
         </div>
 
-        <div class="vis vis-figure" id="pass_completion_process" data-id="pass_completion">
-            <h3>Pass Completion</h3>
-            <select data-arg="process_measure" data-realarg="measure"></select>
+        <div class="vis vis-figure" id="pass_completion_control" data-id="pass_completion">
+            <h3>Pass Completion - Control</h3>
+            Control Measure
+            <select data-arg="control_measure" data-realarg="measure"></select>
+            Player
             <select data-arg="player"></select>
             <div></div>
         </div>
 
-        <div class="vis vis-figure" id="pass_completion_control" data-id="pass_completion">
-            <h3>Pass Completion</h3>
-            <select data-arg="control_measure" data-realarg="measure"></select>
+        <div class="vis vis-figure" id="pass_completion_process" data-id="pass_completion">
+            <h3>Pass Completion - Process</h3>
+            Process Measure
+            <select data-arg="process_measure" data-realarg="measure"></select>
+            Player
+            <select data-arg="player"></select>
+            <div></div>
+        </div>
+
+        <div class="vis vis-figure" id="pass_completion_outcome_first" data-id="pass_completion">
+            <h3>Pass Completion - Outcome First</h3>
+            Outcome Measure
+            <select data-arg="outcome_measure_first" data-realarg="measure"></select>
+            Player
+            <select data-arg="player"></select>
+            <div></div>
+        </div>
+
+        <div class="vis vis-figure" id="pass_completion_outcome_second" data-id="pass_completion">
+            <h3>Pass Completion - Outcome Second</h3>
+            Outcome Measure
+            <select data-arg="outcome_measure_second" data-realarg="measure"></select>
+            Player
             <select data-arg="player"></select>
             <div></div>
         </div>
 
         <div class="vis vis-table" id="player_table">
             <h3>Player Table</h3>
+            Minutes
             <select data-arg="minutes"></select>
+            Podium
             <select data-arg="podium"></select>
             <table class="table"></table>
         </div>
