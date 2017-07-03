@@ -10,12 +10,6 @@
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <script src="static/js/bootstrap.min.js"></script>
 
-    <script src="static/js/d3.min.js"></script>
-
-    <script src="static/js/vega.min.js"></script>
-    <script src="static/js/vega-lite.min.js"></script>
-    <script src="static/js/vega-embed.min.js"></script>
-
     <script src="static/js/echarts.min.js"></script>
 
     <script src="static/js/jquery.dataTables.min.js"></script>
@@ -27,68 +21,58 @@
             return encodeURIComponent(part).replace(/%20/g, "+");
         }
 
-        function visualize(selector, spec, data, flag) {
-            if (flag) {
-                var chart = echarts.init($(selector)[0]);
-                var ecSpec = spec.spec;
-                var type = spec.type;
-                var stack = spec.stack;
+        function visualize(selector, spec, data) {
+            var chart = echarts.init($(selector)[0]);
+            var ecSpec = spec.spec;
+            var type = spec.type;
+            var stack = spec.stack;
 
-                if ("columnField" in spec) {
-                    ecSpec.xAxis = {
-                        data: _.map(data, r => r[spec.xField])
-                    };
+            if ("columnField" in spec) {
+                ecSpec.xAxis = {
+                    data: _.map(data, r => r[spec.xField])
+                };
 
-                    ecSpec.series = _.map(
-                        _.groupBy(data, r => r[spec.columnField]),
-                        (g, k) => {
-                            return {
-                                name: k,
-                                type: type,
-                                data: _.map(g, r => r[spec.yField]),
-                                stack: stack
-                            };
-                        }
-                    );
-                }
-                else if ("rowField" in spec) {
-                    ecSpec.yAxis = {
-                        data: _.map(data, r => r[spec.yField])
-                    };
+                ecSpec.series = _.map(
+                    _.groupBy(data, r => r[spec.columnField]),
+                    (g, k) => {
+                        return {
+                            name: k,
+                            type: type,
+                            data: _.map(g, r => r[spec.yField]),
+                            stack: stack
+                        };
+                    }
+                );
+            }
+            else if ("rowField" in spec) {
+                ecSpec.yAxis = {
+                    data: _.map(data, r => r[spec.yField])
+                };
 
-                    ecSpec.series = _.map(
-                        _.groupBy(data, r => r[spec.rowField]),
-                        (g, k) => {
-                            return {
-                                name: k,
-                                type: type,
-                                data: _.map(g, r => r[spec.xField]),
-                                stack: stack
-                            };
-                        }
-                    );
-                }
-                else {
-                    ecSpec.xAxis = {
-                        data: _.map(data, r => r[spec.xField])
-                    };
-
-                    ecSpec.series = [{
-                        data: _.map(data, r => r[spec.yField]),
-                        type: type,
-                    }];
-                }
-
-                chart.setOption(ecSpec);
+                ecSpec.series = _.map(
+                    _.groupBy(data, r => r[spec.rowField]),
+                    (g, k) => {
+                        return {
+                            name: k,
+                            type: type,
+                            data: _.map(g, r => r[spec.xField]),
+                            stack: stack
+                        };
+                    }
+                );
             }
             else {
-                spec.data.values = data;
-                vg.embed(selector, {
-                    mode: "vega-lite",
-                    spec: spec,
-                    renderer: "svg"
-                });
+                ecSpec.xAxis = {
+                    data: _.map(data, r => r[spec.xField])
+                };
+
+                ecSpec.series = [{
+                    data: _.map(data, r => r[spec.yField]),
+                    type: type,
+                }];
             }
+
+            chart.setOption(ecSpec);
         }
 
         $(document).ready(function() {
@@ -166,12 +150,11 @@
                     var action;
 
                     if ($(this).hasClass("vis-figure")) {
-                        var useECharts = $(this).hasClass("vis-echarts");
                         $.getJSON(`vis/${dataID}.json`, function(response) {
                             var spec = response;
 
                             action = getAction(function(response) {
-                                visualize(`#${id} > div`, spec, response.data, useECharts);
+                                visualize(`#${id} > div`, spec, response.data);
                             });
 
                             $(`#${id} > select`).change(action);
@@ -216,14 +199,14 @@
             margin-right: 10px;
         }
 
-        .vis-echarts > div {
+        .vis-figure > div {
             height: 400px;
         }
     </style>
 </head>
 <body>
     <div class="container" style="max-width:1000px">
-        <div class="form-inline vis vis-figure vis-echarts" id="opposition">
+        <div class="form-inline vis vis-figure" id="opposition">
             <h3>Opposition</h3>
             Measure
             <select class="form-control" data-arg="measure" data-default="6"></select>
@@ -232,7 +215,7 @@
             <div></div>
         </div>
 
-        <div class="form-inline vis vis-figure vis-echarts" id="player_analysis_graph_control" data-id="player_analysis_graph">
+        <div class="form-inline vis vis-figure" id="player_analysis_graph_control" data-id="player_analysis_graph">
             <h3>Player Analysis Graph - Control</h3>
             Control Measure
             <select class="form-control" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
@@ -245,7 +228,7 @@
             <div></div>
         </div>
 
-        <div class="form-inline vis vis-figure vis-echarts" id="player_analysis_graph_process" data-id="player_analysis_graph">
+        <div class="form-inline vis vis-figure" id="player_analysis_graph_process" data-id="player_analysis_graph">
             <h3>Player Analysis Graph - Process</h3>
             Process Measure
             <select class="form-control" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
@@ -258,7 +241,7 @@
             <div></div>
         </div>
 
-        <div class="form-inline vis vis-figure vis-echarts" id="player_analysis_graph_outcome" data-id="player_analysis_graph">
+        <div class="form-inline vis vis-figure" id="player_analysis_graph_outcome" data-id="player_analysis_graph">
             <h3>Player Analysis Graph - Outcome</h3>
             Outcome Measure
             <select class="form-control" data-arg="outcome_measure" data-realarg="measure" data-default="12"></select>
@@ -271,7 +254,7 @@
             <div></div>
         </div>
 
-        <div class="form-inline vis vis-figure vis-echarts" id="player_analysis_graph_final" data-id="player_analysis_graph">
+        <div class="form-inline vis vis-figure" id="player_analysis_graph_final" data-id="player_analysis_graph">
             <h3>Player Analysis Graph - Final Acts Quality</h3>
             Final Acts Quality Measure
             <select class="form-control" data-arg="final_measure" data-realarg="measure" data-default="3"></select>
@@ -284,7 +267,7 @@
             <div></div>
         </div>
 
-        <div class="form-inline vis vis-figure vis-echarts" id="results_graph">
+        <div class="form-inline vis vis-figure" id="results_graph">
             <h3>Results Graph</h3>
             Year
             <select class="form-control" data-arg="year"></select>
@@ -298,7 +281,7 @@
             <select class="form-control" data-arg="format_table" data-realarg="format" style="display: none"></select>
         </div>
 
-        <div class="form-inline vis vis-figure vis-echarts" id="pass_completion_control" data-id="pass_completion">
+        <div class="form-inline vis vis-figure" id="pass_completion_control" data-id="pass_completion">
             <h3>Pass Completion - Control</h3>
             Control Measure
             <select class="form-control" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
@@ -307,7 +290,7 @@
             <div></div>
         </div>
 
-        <div class="form-inline vis vis-figure vis-echarts" id="pass_completion_process" data-id="pass_completion">
+        <div class="form-inline vis vis-figure" id="pass_completion_process" data-id="pass_completion">
             <h3>Pass Completion - Process</h3>
             Process Measure
             <select class="form-control" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
@@ -316,7 +299,7 @@
             <div></div>
         </div>
 
-        <div class="form-inline vis vis-figure vis-echarts" id="pass_completion_outcome_first" data-id="pass_completion">
+        <div class="form-inline vis vis-figure" id="pass_completion_outcome_first" data-id="pass_completion">
             <h3>Pass Completion - Outcome First</h3>
             Outcome Measure
             <select class="form-control" data-arg="outcome_measure_first" data-realarg="measure" data-default="7"></select>
@@ -325,7 +308,7 @@
             <div></div>
         </div>
 
-        <div class="form-inline vis vis-figure vis-echarts" id="pass_completion_outcome_second" data-id="pass_completion">
+        <div class="form-inline vis vis-figure" id="pass_completion_outcome_second" data-id="pass_completion">
             <h3>Pass Completion - Outcome Second</h3>
             Outcome Measure
             <select class="form-control" data-arg="outcome_measure_second" data-realarg="measure" data-default="3"></select>
