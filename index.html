@@ -165,18 +165,16 @@
                         var table = null;
 
                         action = getAction(function(response) {
-                            var columns = [];
-                            var keys = Object.keys(response.data[0]);
-                            for (var i = 0; i < keys.length; i++) {
-                                columns.push({data: keys[i], title: keys[i]});
-                            }
                             if (table) {
                                 table.destroy();
                                 $(`#${id} .table`).empty();
                             }
+
                             table = $(`#${id} .table`).DataTable({
-                                "data": response.data,
-                                "columns": columns,
+                                "data": _.rest(response.data),
+                                "columns": _.map(response.data[0], v => {
+                                    return {title: v};
+                                }),
 
                                 "displayLength": -1,
                                 "paging": false,
