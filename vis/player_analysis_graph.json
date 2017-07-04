@@ -1,8 +1,24 @@
 {
     "spec": {
-        "xAxis": {},
+        "xAxis": {
+	        "axisLabel": {
+        		"rotate": 45,
+        		"interval":0
+            },
+            "axisLine":{
+                "lineStyle":{
+                    "color" : "black"
+                }
+            },
+            "name": "Player(s)",
+            "nameTextStyle": {
+                "fontSize": 14
+            }
+        },
         "yAxis": {},
-        "series": []
+        "series": [],
+        "tooltip":[],
+        "grid": {}
     },
     "xField": "Player",
     "yField": "score",

@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <script src="static/js/bootstrap.min.js"></script>
 
+
+
     <script src="static/js/echarts.min.js"></script>
 
     <script src="static/js/jquery.dataTables.min.js"></script>
@@ -27,10 +29,49 @@
             var type = spec.type;
             var stack = spec.stack;
 
+            ecSpec.yAxis = {
+                "axisLine":{
+                    "lineStyle":{
+                        "color" : "black"
+                    }
+                },
+                "nameTextStyle": {
+                    "fontSize": 14
+                }
+            };
+
+            ecSpec.grid = {
+                "bottom": 100,
+                "containLabel": "true"
+            };
+
+            ecSpec.tooltip = {
+                "trigger": "axis",
+                "axisPointer" : {            
+                    "type" : "shadow"       
+                }
+            };
+
+            ecSpec.toolbox = {
+                "feature" : {            
+                    "saveAsImage" : {
+                        "title": "Save As Image"
+                    }
+                },
+                "right": 50,
+                "itemSize": 25,
+                "iconStyle": {
+                    "normal": {
+                        "borderWidth": 3
+                    }
+                }
+                
+            };
+
             if ("columnField" in spec) {
-                ecSpec.xAxis = {
-                    data: _.map(data, r => r[spec.xField])
-                };
+                ecSpec.xAxis.data = _.uniq(_.map(data, r => r[spec.xField]));
+                    
+                ecSpec.yAxis.name = spec.yField;
 
                 ecSpec.series = _.map(
                     _.groupBy(data, r => r[spec.columnField]),
@@ -39,15 +80,29 @@
                             name: k,
                             type: type,
                             data: _.map(g, r => r[spec.yField]),
-                            stack: stack
+                            stack: stack,
+                            barMaxWidth: '40',
+                            barGap: "10%"
                         };
                     }
                 );
+
+                ecSpec.legend = {
+                    data: _.map(data, r => r[spec.columnField]),
+                    top: 10,
+                    itemWidth: 25,
+                    itemHeight: 10,
+                    textStyle: {
+                        fontSize: 14
+                    }
+                };
             }
             else if ("rowField" in spec) {
-                ecSpec.yAxis = {
-                    data: _.map(data, r => r[spec.yField])
-                };
+                ecSpec.yAxis.data = _.uniq(_.map(data, r => r[spec.yField]));
+                    
+                ecSpec.xAxis.name = spec.xField;
+
+                ecSpec.yAxis.name = spec.yField;
 
                 ecSpec.series = _.map(
                     _.groupBy(data, r => r[spec.rowField]),
@@ -56,19 +111,46 @@
                             name: k,
                             type: type,
                             data: _.map(g, r => r[spec.xField]),
-                            stack: stack
+                            stack: stack,
+                            barMaxWidth: '40',
+                            barGap: "10%"
                         };
                     }
                 );
+
+                ecSpec.legend = {
+                    data: _.map(data, r => r[spec.rowField]),
+                    top: 10,
+                    itemWidth: 25,
+                    itemHeight: 10,
+                    textStyle: {
+                        fontSize: 14
+                    }
+                };
             }
             else {
-                ecSpec.xAxis = {
-                    data: _.map(data, r => r[spec.xField])
-                };
+                ecSpec.xAxis.data = _.uniq(_.map(data, r => r[spec.xField]));
+                    ecSpec.yAxis.name = "Times of Completion on Average";
 
                 ecSpec.series = [{
                     data: _.map(data, r => r[spec.yField]),
                     type: type,
+                    barMaxWidth: '40',
+                    barGap: "10%",
+                    markLine: {
+                        data: [
+                            {
+                                type: "average", 
+                                name: "average value",
+                            }
+                        ],
+                        lineStyle: {
+                            normal: {
+                                color: "rgb(0, 102, 153)",
+                                width: 2
+                            }
+                        }
+                    }
                 }];
             }
 
@@ -222,7 +304,7 @@
     </style>
 </head>
 <body>
-    <div class="container" style="max-width: 1000px">
+    <div class="container" style="max-width: 2000px">
         <div class="vis vis-figure" id="opposition">
             <h3>Opposition</h3>
             <table>

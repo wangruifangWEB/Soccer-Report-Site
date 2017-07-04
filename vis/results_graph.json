@@ -1,8 +1,22 @@
 {
     "spec": {
-        "xAxis": {},
+        "xAxis": {
+            "axisLine":{
+                "lineStyle":{
+                    "color" : "black"
+                }
+            },
+            "name":"",
+            "nameTextStyle": {
+                "fontSize" : "14"
+            },
+            "interval": 1
+        },
         "yAxis": {},
-        "series": []
+        "series": [],
+        "legend": [],
+        "tooltip":[],
+        "grid": {}
     },
     "xField": "Value",
     "yField": "Opposition Ranking",

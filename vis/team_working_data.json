@@ -1,8 +1,26 @@
 {
     "spec": {
-        "xAxis": {},
+
+    	"tooltip" : {},
+        "xAxis": {
+        	"axisLabel": {
+        		"rotate": 45,
+        		"interval":0
+            },
+            "axisLine":{
+                "lineStyle":{
+                    "color" : "black"
+                }
+            },
+            "name": "Year",
+            "nameTextStyle": {
+                "fontSize": 14
+            }
+        },
         "yAxis": {},
-        "series": []
+        "series": [],
+        "legend": [],
+        "grid": {}
     },
     "xField": "Year",
     "yField": "Score",
