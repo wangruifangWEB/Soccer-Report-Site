@@ -1,0 +1,11 @@
+{
+    "spec": {
+        "xAxis": {},
+        "yAxis": {},
+        "series": []
+    },
+    "xField": "Year",
+    "yField": "Score",
+    "columnField": "Nation",
+    "type": "bar"
+}

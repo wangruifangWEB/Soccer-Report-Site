@@ -12,6 +12,7 @@
     "underscore": "*",
     "echarts": "*",
     "datatables.net": "*",
-    "datatables.net-bs": "*"
+    "datatables.net-bs": "*",
+    "bootswatch": "*"
   }
 }
