@@ -205,6 +205,9 @@
         .vis select {
             width: 200px;
         }
+        .vis select[multiple] {
+            min-height: 200px;
+        }
 
         .vis-figure div {
             height: 400px;
@@ -305,7 +308,7 @@
                     </td>
                     <td>
                         Year
-                        <select class="form-control input-sm" data-arg="year"></select>
+                        <select class="form-control input-sm" data-arg="year" multiple></select>
                         <select class="form-control input-sm" data-arg="format_figure" data-realarg="format" style="display: none"></select>
                     </td>
                 </tr>
@@ -337,7 +340,7 @@
                         Control Measure
                         <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
                         Minutes
-                        <select class="form-control input-sm" data-arg="minutes" data-default="6"></select>
+                        <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
                         <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                         Players
@@ -358,7 +361,7 @@
                         Process Measure
                         <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
                         Minutes
-                        <select class="form-control input-sm" data-arg="minutes" data-default="6"></select>
+                        <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
                         <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                         Players
@@ -379,7 +382,7 @@
                         Outcome Measure
                         <select class="form-control input-sm" data-arg="outcome_measure" data-realarg="measure" data-default="12"></select>
                         Minutes
-                        <select class="form-control input-sm" data-arg="minutes" data-default="6"></select>
+                        <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
                         <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                         Players
@@ -400,7 +403,7 @@
                         Final Acts Quality Measure
                         <select class="form-control input-sm" data-arg="final_measure" data-realarg="measure" data-default="3"></select>
                         Minutes
-                        <select class="form-control input-sm" data-arg="minutes" data-default="6"></select>
+                        <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
                         <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                         Players
@@ -489,7 +492,7 @@
                     </td>
                     <td>
                         Minutes
-                        <select class="form-control input-sm" data-arg="minutes" data-default="6"></select>
+                        <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
                         <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                     </td>
