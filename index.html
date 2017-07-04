@@ -154,7 +154,7 @@
                             var spec = response;
 
                             action = getAction(function(response) {
-                                visualize(`#${id} div`, spec, response.data);
+                                visualize(`#${id} .vis-target`, spec, response.data);
                             });
 
                             $(`#${id} select`).change(action);
@@ -167,10 +167,10 @@
                         action = getAction(function(response) {
                             if (table) {
                                 table.destroy();
-                                $(`#${id} .table`).empty();
+                                $(`#${id} .vis-target`).empty();
                             }
 
-                            table = $(`#${id} .table`).DataTable({
+                            table = $(`#${id} .vis-target`).DataTable({
                                 "data": _.rest(response.data),
                                 "columns": _.map(response.data[0], v => {
                                     return {title: v};
@@ -203,18 +203,19 @@
         }
 
         .vis select {
-            width: 200px;
+            min-width: 50px;
+            max-width: 200px;
         }
         .vis select[multiple] {
             min-height: 200px;
         }
 
-        .vis-figure div {
+        .vis-figure .vis-target {
             height: 400px;
             min-width: 400px;
         }
 
-        .vis-table .table td {
+        .vis-table .vis-target td {
             min-width: 100px;
             white-space: nowrap;
         }
@@ -227,7 +228,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Measure
@@ -244,7 +245,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Control Measure
@@ -259,7 +260,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Process Measure
@@ -274,7 +275,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Outcome Measure
@@ -289,7 +290,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Final Acts Quality Measure
@@ -304,7 +305,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Year
@@ -320,7 +321,7 @@
             <table>
                 <tr>
                     <td>
-                        <table class="table table-hover"></table>
+                        <table class="table table-hover vis-target"></table>
                     </td>
                     <td>
                         <select class="form-control input-sm" data-arg="format_table" data-realarg="format" style="display: none"></select>
@@ -334,7 +335,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Control Measure
@@ -342,7 +343,10 @@
                         Minutes
                         <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
-                        <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        <div class="form-inline">
+                            <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
+                            <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        </div>
                         Players
                         <select class="form-control input-sm" data-arg="players" multiple></select>
                     </td>
@@ -355,7 +359,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Process Measure
@@ -363,7 +367,10 @@
                         Minutes
                         <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
-                        <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        <div class="form-inline">
+                            <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
+                            <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        </div>
                         Players
                         <select class="form-control input-sm" data-arg="players" multiple></select>
                     </td>
@@ -376,7 +383,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Outcome Measure
@@ -384,7 +391,10 @@
                         Minutes
                         <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
-                        <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        <div class="form-inline">
+                            <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
+                            <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        </div>
                         Players
                         <select class="form-control input-sm" data-arg="players" multiple></select>
                     </td>
@@ -397,7 +407,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Final Acts Quality Measure
@@ -405,7 +415,10 @@
                         Minutes
                         <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
-                        <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        <div class="form-inline">
+                            <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
+                            <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        </div>
                         Players
                         <select class="form-control input-sm" data-arg="players" multiple></select>
                     </td>
@@ -418,7 +431,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Control Measure
@@ -435,7 +448,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Process Measure
@@ -452,7 +465,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Outcome Measure
@@ -469,7 +482,7 @@
             <table>
                 <tr>
                     <td>
-                        <div></div>
+                        <div class="vis-target"></div>
                     </td>
                     <td>
                         Outcome Measure
@@ -487,14 +500,17 @@
                 <tr>
                     <td>
                         <div style="overflow: scroll; max-width: 800px;">
-                            <table class="table table-hover"></table>
+                            <table class="table table-hover vis-target"></table>
                         </div>
                     </td>
                     <td>
                         Minutes
                         <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
                         Podium
-                        <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        <div class="form-inline">
+                            <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
+                            <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                        </div>
                     </td>
                 </tr>
             </table>
