@@ -296,6 +296,36 @@
             </table>
         </div>
 
+        <div class="vis vis-figure" id="results_graph">
+            <h3>Results Graph</h3>
+            <table>
+                <tr>
+                    <td>
+                        <div></div>
+                    </td>
+                    <td>
+                        Year
+                        <select class="form-control input-sm" data-arg="year"></select>
+                        <select class="form-control input-sm" data-arg="format_figure" data-realarg="format" style="display: none"></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="vis vis-table" id="results_table" data-id="results_graph">
+            <h3>Results Table</h3>
+            <table>
+                <tr>
+                    <td>
+                        <table class="table table-hover"></table>
+                    </td>
+                    <td>
+                        <select class="form-control input-sm" data-arg="format_table" data-realarg="format" style="display: none"></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <div class="vis vis-figure" id="player_analysis_graph_control" data-id="player_analysis_graph">
             <h3>Player Analysis Graph - Control</h3>
             <table>
@@ -375,36 +405,6 @@
                         <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                         Players
                         <select class="form-control input-sm" data-arg="players" multiple></select>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="vis vis-figure" id="results_graph">
-            <h3>Results Graph</h3>
-            <table>
-                <tr>
-                    <td>
-                        <div></div>
-                    </td>
-                    <td>
-                        Year
-                        <select class="form-control input-sm" data-arg="year"></select>
-                        <select class="form-control input-sm" data-arg="format_figure" data-realarg="format" style="display: none"></select>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="vis vis-table" id="results_table" data-id="results_graph">
-            <h3>Results Table</h3>
-            <table>
-                <tr>
-                    <td>
-                        <table class="table table-hover"></table>
-                    </td>
-                    <td>
-                        <select class="form-control input-sm" data-arg="format_table" data-realarg="format" style="display: none"></select>
                     </td>
                 </tr>
             </table>
