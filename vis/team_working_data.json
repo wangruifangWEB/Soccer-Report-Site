@@ -4,7 +4,6 @@
     	"tooltip" : {},
         "xAxis": {
             "axisLabel": {
-                "rotate": 45,
                 "interval": 0
             },
             "name": "Year"
