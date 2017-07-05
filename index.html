@@ -52,7 +52,7 @@
                         return {
                             name: k,
                             type: type,
-                            data: _.map(g, r => r[spec.yField]),
+                            data: _.map(g, r => ['' + r[spec.xField], r[spec.yField]]),
                             stack: stack,
                             barMaxWidth: '50',
                             barGap: "10%"
@@ -73,7 +73,7 @@
                         return {
                             name: k,
                             type: type,
-                            data: _.map(g, r => r[spec.xField]),
+                            data: _.map(g, r => [r[spec.xField], '' + r[spec.yField]]),
                             stack: stack,
                             barMaxWidth: '50',
                             barGap: "10%"
