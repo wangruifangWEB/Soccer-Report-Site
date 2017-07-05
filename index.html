@@ -10,8 +10,6 @@
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
     <script src="static/js/bootstrap.min.js"></script>
 
-
-
     <script src="static/js/echarts.min.js"></script>
 
     <script src="static/js/jquery.dataTables.min.js"></script>
@@ -29,49 +27,24 @@
             var type = spec.type;
             var stack = spec.stack;
 
-            ecSpec.yAxis = {
-                "axisLine":{
-                    "lineStyle":{
-                        "color" : "black"
-                    }
-                },
-                "nameTextStyle": {
-                    "fontSize": 14
-                }
-            };
-
-            ecSpec.grid = {
-                "bottom": 100,
-                "containLabel": "true"
-            };
-
             ecSpec.tooltip = {
                 "trigger": "axis",
-                "axisPointer" : {            
-                    "type" : "shadow"       
+                "axisPointer" : {
+                    "type" : "shadow"
                 }
             };
 
             ecSpec.toolbox = {
-                "feature" : {            
+                "feature" : {
                     "saveAsImage" : {
-                        "title": "Save As Image"
+                        "title": "Save as Image"
                     }
                 },
-                "right": 50,
-                "itemSize": 25,
-                "iconStyle": {
-                    "normal": {
-                        "borderWidth": 3
-                    }
-                }
-                
+                "right": 50
             };
 
             if ("columnField" in spec) {
                 ecSpec.xAxis.data = _.uniq(_.map(data, r => r[spec.xField]));
-                    
-                ecSpec.yAxis.name = spec.yField;
 
                 ecSpec.series = _.map(
                     _.groupBy(data, r => r[spec.columnField]),
@@ -81,28 +54,18 @@
                             type: type,
                             data: _.map(g, r => r[spec.yField]),
                             stack: stack,
-                            barMaxWidth: '40',
+                            barMaxWidth: '50',
                             barGap: "10%"
                         };
                     }
                 );
 
                 ecSpec.legend = {
-                    data: _.map(data, r => r[spec.columnField]),
-                    top: 10,
-                    itemWidth: 25,
-                    itemHeight: 10,
-                    textStyle: {
-                        fontSize: 14
-                    }
+                    data: _.map(data, r => r[spec.columnField])
                 };
             }
             else if ("rowField" in spec) {
                 ecSpec.yAxis.data = _.uniq(_.map(data, r => r[spec.yField]));
-                    
-                ecSpec.xAxis.name = spec.xField;
-
-                ecSpec.yAxis.name = spec.yField;
 
                 ecSpec.series = _.map(
                     _.groupBy(data, r => r[spec.rowField]),
@@ -112,36 +75,28 @@
                             type: type,
                             data: _.map(g, r => r[spec.xField]),
                             stack: stack,
-                            barMaxWidth: '40',
+                            barMaxWidth: '50',
                             barGap: "10%"
                         };
                     }
                 );
 
                 ecSpec.legend = {
-                    data: _.map(data, r => r[spec.rowField]),
-                    top: 10,
-                    itemWidth: 25,
-                    itemHeight: 10,
-                    textStyle: {
-                        fontSize: 14
-                    }
+                    data: _.map(data, r => r[spec.rowField])
                 };
             }
             else {
                 ecSpec.xAxis.data = _.uniq(_.map(data, r => r[spec.xField]));
-                    ecSpec.yAxis.name = "Times of Completion on Average";
 
                 ecSpec.series = [{
                     data: _.map(data, r => r[spec.yField]),
                     type: type,
-                    barMaxWidth: '40',
+                    barMaxWidth: '50',
                     barGap: "10%",
                     markLine: {
                         data: [
                             {
-                                type: "average", 
-                                name: "average value",
+                                type: "average"
                             }
                         ],
                         lineStyle: {
@@ -304,7 +259,7 @@
     </style>
 </head>
 <body>
-    <div class="container" style="max-width: 2000px">
+    <div class="container" style="max-width: 1000px">
         <div class="vis vis-figure" id="opposition">
             <h3>Opposition</h3>
             <table>
@@ -391,7 +346,7 @@
                     </td>
                     <td>
                         Year
-                        <select class="form-control input-sm" data-arg="year" multiple></select>
+                        <select class="form-control input-sm" data-arg="year" data-default="5" multiple></select>
                         <select class="form-control input-sm" data-arg="format_figure" data-realarg="format" style="display: none"></select>
                     </td>
                 </tr>

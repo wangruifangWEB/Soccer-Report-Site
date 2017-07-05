@@ -1,18 +1,12 @@
 {
     "spec": {
         "xAxis": {
-            "axisLine":{
-                "lineStyle":{
-                    "color" : "black"
-                }
-            },
-            "name":"",
-            "nameTextStyle": {
-                "fontSize" : "14"
-            },
+            "name": "#Games",
             "interval": 1
         },
-        "yAxis": {},
+        "yAxis": {
+            "name": "Opposition Ranking"
+        },
         "series": [],
         "legend": [],
         "tooltip":[],

@@ -3,21 +3,15 @@
 
     	"tooltip" : {},
         "xAxis": {
-        	"axisLabel": {
-        		"rotate": 45,
-        		"interval":0
+            "axisLabel": {
+                "rotate": 45,
+                "interval": 0
             },
-            "axisLine":{
-                "lineStyle":{
-                    "color" : "black"
-                }
-            },
-            "name": "Year",
-            "nameTextStyle": {
-                "fontSize": 14
-            }
+            "name": "Year"
         },
-        "yAxis": {},
+        "yAxis": {
+            "name": "Measure Score"
+        },
         "series": [],
         "legend": [],
         "grid": {}

@@ -1,21 +1,15 @@
 {
     "spec": {
         "xAxis": {
-        	"axisLabel": {
-        		"rotate": 45,
-        		"interval":0
+            "axisLabel": {
+                "rotate": 45,
+                "interval": 0
             },
-            "axisLine":{
-                "lineStyle":{
-                    "color" : "black"
-                }
-            },
-            "name": "Match ID",
-            "nameTextStyle": {
-                "fontSize": 14
-            }
+            "name": "Match ID"
         },
-        "yAxis": {},
+        "yAxis": {
+            "name": "Measure Score"
+        },
         "series": [],
         "tooltip":[],
         "grid": {}
