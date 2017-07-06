@@ -115,7 +115,7 @@
         function selectAll(buttonObj, value) {
             var selectObj = buttonObj.parent().next();
             selectObj.children('option').prop("selected", value);
-            selectObj.trigger("change");
+            selectObj.change();
         }
 
         $(document).ready(function() {
@@ -207,34 +207,38 @@
                         return argStr
                     }
 
-                    function getAction(func) {
-                        return () => $.getJSON(`http://${host}/${dataID}/func?${getArgStr()}`, func);
+                    function getAction(selector, func) {
+                        var target = $(selector).attr("data-target");
+                        if (target === undefined) {
+                            target = "func";
+                        }
+
+                        return () => $.getJSON(`http://${host}/${dataID}/${target}?${getArgStr()}`, func);
                     }
 
-                    var action;
-
-                    if ($(this).hasClass("vis-figure")) {
+                    if ($(this).has(".vis-figure").length > 0) {
                         $.getJSON(`vis/${dataID}.json`, function(response) {
                             var spec = response;
 
-                            action = getAction(function(response) {
-                                visualize(`#${id} .vis-target`, spec, response.data);
+                            var action = getAction(`#${id} .vis-figure`, function(response) {
+                                visualize(`#${id} .vis-figure`, spec, response.data);
                             });
 
                             $(`#${id} select`).change(action);
                             setTimeout(action, 400);
                         });
                     }
-                    else if ($(this).hasClass("vis-table")) {
+
+                    if ($(this).has(".vis-table").length > 0) {
                         var table = null;
 
-                        action = getAction(function(response) {
+                        var action = getAction(`#${id} .vis-table`, function(response) {
                             if (table) {
                                 table.destroy();
-                                $(`#${id} .vis-target`).empty();
+                                $(`#${id} .vis-table`).empty();
                             }
 
-                            table = $(`#${id} .vis-target`).DataTable({
+                            table = $(`#${id} .vis-table`).DataTable({
                                 "data": _.rest(response.data),
                                 "columns": _.map(response.data[0], v => {
                                     return {title: v};
@@ -274,25 +278,35 @@
             min-height: 200px;
         }
 
-        .vis-figure .vis-target {
+        .vis-figure {
             height: 400px;
             min-width: 400px;
         }
 
-        .vis-table .vis-target td {
+        .vis-table td {
             min-width: 100px;
             white-space: nowrap;
+        }
+
+        #opposition .vis-table th {
+            border: none;
+        }
+        #opposition .vis-table tbody {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container" style="max-width: 1000px">
-        <div class="vis vis-figure" id="opposition">
+        <div class="vis" id="opposition">
             <h3>Opposition</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
+                        <div style="max-width: 800px; font-size: 12px">
+                            <table class="table table-condensed vis-table" data-target="func_result"></table>
+                        </div>
                     </td>
                     <td>
                         Measure
@@ -304,12 +318,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="team_working_data_control" data-id="team_working_data">
+        <div class="vis" id="team_working_data_control" data-id="team_working_data">
             <h3>Team Working Data - Control</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Control Measure
@@ -319,12 +333,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="team_working_data_process" data-id="team_working_data">
+        <div class="vis" id="team_working_data_process" data-id="team_working_data">
             <h3>Team Working Data - Process</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Process Measure
@@ -334,12 +348,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="team_working_data_outcome" data-id="team_working_data">
+        <div class="vis" id="team_working_data_outcome" data-id="team_working_data">
             <h3>Team Working Data - Outcome</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Outcome Measure
@@ -349,12 +363,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="team_working_data_final" data-id="team_working_data">
+        <div class="vis" id="team_working_data_final" data-id="team_working_data">
             <h3>Team Working Data - Final Acts Quality</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Final Acts Quality Measure
@@ -364,12 +378,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="results_graph">
+        <div class="vis" id="results_graph">
             <h3>Results Graph</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Year
@@ -380,12 +394,12 @@
             </table>
         </div>
 
-        <div class="vis vis-table" id="results_table" data-id="results_graph">
+        <div class="vis" id="results_table" data-id="results_graph">
             <h3>Results Table</h3>
             <table>
                 <tr>
                     <td>
-                        <table class="table table-hover vis-target"></table>
+                        <table class="table table-hover table-condensed vis-table"></table>
                     </td>
                     <td>
                         <select class="form-control input-sm" data-arg="format_table" data-realarg="format" style="display: none"></select>
@@ -394,12 +408,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="player_analysis_graph_control" data-id="player_analysis_graph">
+        <div class="vis" id="player_analysis_graph_control" data-id="player_analysis_graph">
             <h3>Player Analysis Graph - Control</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Control Measure
@@ -418,12 +432,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="player_analysis_graph_process" data-id="player_analysis_graph">
+        <div class="vis" id="player_analysis_graph_process" data-id="player_analysis_graph">
             <h3>Player Analysis Graph - Process</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Process Measure
@@ -442,12 +456,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="player_analysis_graph_outcome" data-id="player_analysis_graph">
+        <div class="vis" id="player_analysis_graph_outcome" data-id="player_analysis_graph">
             <h3>Player Analysis Graph - Outcome</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Outcome Measure
@@ -466,12 +480,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="player_analysis_graph_final" data-id="player_analysis_graph">
+        <div class="vis" id="player_analysis_graph_final" data-id="player_analysis_graph">
             <h3>Player Analysis Graph - Final Acts Quality</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Final Acts Quality Measure
@@ -490,12 +504,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="pass_completion_control" data-id="pass_completion">
+        <div class="vis" id="pass_completion_control" data-id="pass_completion">
             <h3>Pass Completion - Control</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Control Measure
@@ -507,12 +521,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="pass_completion_process" data-id="pass_completion">
+        <div class="vis" id="pass_completion_process" data-id="pass_completion">
             <h3>Pass Completion - Process</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Process Measure
@@ -524,12 +538,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="pass_completion_outcome_first" data-id="pass_completion">
+        <div class="vis" id="pass_completion_outcome_first" data-id="pass_completion">
             <h3>Pass Completion - Outcome</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Outcome Measure
@@ -541,12 +555,12 @@
             </table>
         </div>
 
-        <div class="vis vis-figure" id="pass_completion_outcome_second" data-id="pass_completion">
+        <div class="vis" id="pass_completion_outcome_second" data-id="pass_completion">
             <h3>Pass Completion - Outcome</h3>
             <table>
                 <tr>
                     <td>
-                        <div class="vis-target"></div>
+                        <div class="vis-figure"></div>
                     </td>
                     <td>
                         Outcome Measure
@@ -558,13 +572,13 @@
             </table>
         </div>
 
-        <div class="vis vis-table" id="player_table">
+        <div class="vis" id="player_table">
             <h3>Player Table</h3>
             <table>
                 <tr>
                     <td>
                         <div style="overflow: scroll; max-width: 800px;">
-                            <table class="table table-hover vis-target"></table>
+                            <table class="table table-hover table-condensed vis-table"></table>
                         </div>
                     </td>
                     <td>
