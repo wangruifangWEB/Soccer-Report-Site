@@ -298,6 +298,34 @@
 </head>
 <body>
     <div class="container" style="max-width: 1000px">
+        <div class="vis" id="results_graph">
+            <h3>Results Graph</h3>
+            <table>
+                <tr>
+                    <td>
+                        <div class="vis-figure"></div>
+                    </td>
+                    <td>
+                        Year
+                        <select class="form-control input-sm" data-arg="year" data-default="5" multiple></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="vis" id="results_table" data-id="results_graph">
+            <h3>Results Table</h3>
+            <table>
+                <tr>
+                    <td>
+                        <table class="table table-hover table-condensed vis-table" data-target="func_table"></table>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <div class="vis" id="opposition">
             <h3>Opposition</h3>
             <table>
@@ -373,34 +401,6 @@
                     <td>
                         Final Acts Quality Measure
                         <select class="form-control input-sm" data-arg="final_measure" data-realarg="measure" data-default="3"></select>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="vis" id="results_graph">
-            <h3>Results Graph</h3>
-            <table>
-                <tr>
-                    <td>
-                        <div class="vis-figure"></div>
-                    </td>
-                    <td>
-                        Year
-                        <select class="form-control input-sm" data-arg="year" data-default="5" multiple></select>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="vis" id="results_table" data-id="results_graph">
-            <h3>Results Table</h3>
-            <table>
-                <tr>
-                    <td>
-                        <table class="table table-hover table-condensed vis-table" data-target="func_table"></table>
-                    </td>
-                    <td>
                     </td>
                 </tr>
             </table>
