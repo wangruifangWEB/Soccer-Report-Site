@@ -216,12 +216,26 @@
                         return () => $.getJSON(`http://${host}/${dataID}/${target}?${getArgStr()}`, func);
                     }
 
+                    function setAxisName(spec) {
+                        for (i = 0; i < args.length; i++) {
+                            var key = args[i];
+                            var realKey = realArgs[i];
+                            var value = $(`#${id} select[data-arg=${key}]`).val();
+
+                            if (realKey == "measure") {
+                                spec.spec.yAxis.name = value;
+                            }
+                        }
+
+                        return spec;
+                    }
+
                     if ($(this).has(".vis-figure").length > 0) {
                         $.getJSON(`vis/${dataID}.json`, function(response) {
                             var spec = response;
 
                             var action = getAction(`#${id} .vis-figure`, function(response) {
-                                visualize(`#${id} .vis-figure`, spec, response.data);
+                                visualize(`#${id} .vis-figure`, setAxisName(spec), response.data);
                             });
 
                             $(`#${id} select`).change(action);
