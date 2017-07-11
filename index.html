@@ -238,6 +238,17 @@
                                 $(`#${id} .vis-table`).empty();
                             }
 
+                            var data_tuple = [];
+                            var player_name = "";
+                            var last_name = "";
+
+                            if (id === "player_table") {
+                                for (i = 1; i < response.data.length; i++){
+                                    player_name = response.data[i][0].split(' ');
+                                    response.data[i][0] = player_name[player_name.length - 1];;
+                                }
+                            }
+
                             table = $(`#${id} .vis-table`).DataTable({
                                 "data": _.rest(response.data),
                                 "columns": _.map(response.data[0], v => {
