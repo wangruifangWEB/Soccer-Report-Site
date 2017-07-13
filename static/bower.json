@@ -13,6 +13,8 @@
     "echarts": "*",
     "datatables.net": "*",
     "datatables.net-bs": "*",
-    "bootswatch": "*"
+    "bootswatch": "*",
+    "datatables.net-fixedcolumns": "*",
+    "datatables.net-fixedcolumns-bs": "*"
   }
 }

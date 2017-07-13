@@ -15,6 +15,8 @@
     <script src="static/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/dataTables.bootstrap.min.css">
     <script src="static/js/dataTables.bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/fixedColumns.bootstrap.min.css">
+    <script src="static/js/dataTables.fixedColumns.min.js"></script>
 
     <script type="text/javascript">
         function encodeURI(part) {
@@ -281,15 +283,16 @@
 
                                 table = $(`#${id} .vis-table`).DataTable({
                                     "data": _.rest(response.data),
-                                    "columns": _.map(response.data[0], v => {
-                                        return {title: v};
-                                    }),
-
+                                    "columns": _.map(response.data[0], v => ({title: v})),
                                     "displayLength": -1,
                                     "paging": false,
                                     "ordering": false,
                                     "info": false,
-                                    "searching": false
+                                    "searching": false,
+                                    "scrollY": true,
+                                    "scrollX": true,
+                                    "scrollCollapse": true,
+                                    "fixedColumns": true
                                 })
                             });
 
