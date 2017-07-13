@@ -52,7 +52,10 @@
                         return {
                             name: k,
                             type: type,
-                            data: _.map(g, r => ['' + r[spec.xField], r[spec.yField]]),
+                            data: _.filter(
+                                _.map(g, r => r[spec.yField]),
+                                score => score !== null
+                            ),
                             stack: stack,
                             barMaxWidth: '50',
                             barGap: "10%"
@@ -86,10 +89,21 @@
                 };
             }
             else {
-                ecSpec.xAxis.data = _.uniq(_.map(data, r => r[spec.xField]));
+                ecSpec.xAxis.data = _.uniq(
+                    _.map(
+                        _.filter(
+                            _.map(data, r => [r[spec.xField], r[spec.yField]]),
+                            ([name, score]) => score !== null
+                        ),
+                        g => g[0]
+                        )
+                    );
 
                 ecSpec.series = [{
-                    data: _.map(data, r => r[spec.yField]),
+                    data: _.filter(
+                        _.map(data, r => r[spec.yField]),
+                        score => score !== null
+                    ),
                     type: type,
                     barMaxWidth: '50',
                     barGap: "10%",
@@ -144,7 +158,7 @@
                 $(".vis").map(function() {
                     var id = $(this).attr('id');
 
-                    var ready = $(`#${id} select`).length;
+                    var notReady = $(`#${id} select`).length;
 
                     var dataID = id;
                     if ($(this).attr('data-id') !== undefined) {
@@ -202,7 +216,7 @@
                                 $(this).find(`option:nth-of-type(${defaultPos})`).prop("selected", true);
                             }
 
-                            ready -= 1;
+                            notReady -= 1;
                         });
                     });
 
@@ -237,7 +251,7 @@
                     }
 
                     function init(obj) {
-                        if (ready > 0) {
+                        if (notReady > 0) {
                             setTimeout(() => init(obj), 400);
 
                             return;
