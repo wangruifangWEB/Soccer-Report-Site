@@ -165,23 +165,41 @@
                         $.getJSON(`http://${host}/${dataID}/${argName}`, response => {
                             var list = response.data;
                             var options = "";
-                            if (list.length > 0) {
+                            if (list.length == 0) {
+                                return;
+                            }
+
+                            var key = $(this).attr("data-key");
+
+                            if (key === undefined) {
                                 for (var i = 0; i < list.length; i++) {
                                     options += `<option value="${list[i]}">${list[i]}</option>`;
                                 }
+                            }
+                            else {
+                                _.map(_.groupBy(list, o => o.key), (l, g) => {
+                                    options += `<optgroup label="${g}">`;
 
-                                $(this).html(options);
-                                if (defaultPos === undefined) {
-                                    if ($(this).prop("multiple")) {
-                                        $(this).children(`option`).prop("selected", true);
+                                    localList = _.map(l, o => o.value);
+                                    for (var i = 0; i < localList.length; i++) {
+                                        options += `<option value="${localList[i]}">${localList[i]}</option>`;
                                     }
-                                    else {
-                                        $(this).children(`option:first-of-type`).prop("selected", true);
-                                    }
+
+                                    options += `</optgroup>`;
+                                });
+                            }
+
+                            $(this).html(options);
+                            if (defaultPos === undefined) {
+                                if ($(this).prop("multiple")) {
+                                    $(this).find(`option`).prop("selected", true);
                                 }
                                 else {
-                                    $(this).children(`option:nth-of-type(${defaultPos})`).prop("selected", true);
+                                    $(this).find(`option:first-of-type`).prop("selected", true);
                                 }
+                            }
+                            else {
+                                $(this).find(`option:nth-of-type(${defaultPos})`).prop("selected", true);
                             }
                         });
                     });
@@ -518,7 +536,7 @@
                         Control Measure
                         <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
                         Player
-                        <select class="form-control input-sm" data-arg="player"></select>
+                        <select class="form-control input-sm" data-arg="player" data-key="key"></select>
                     </td>
                 </tr>
             </table>
@@ -535,7 +553,7 @@
                         Process Measure
                         <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
                         Player
-                        <select class="form-control input-sm" data-arg="player"></select>
+                        <select class="form-control input-sm" data-arg="player" data-key="key"></select>
                     </td>
                 </tr>
             </table>
@@ -552,7 +570,7 @@
                         Outcome Measure
                         <select class="form-control input-sm" data-arg="outcome_measure_first" data-realarg="measure" data-default="7"></select>
                         Player
-                        <select class="form-control input-sm" data-arg="player"></select>
+                        <select class="form-control input-sm" data-arg="player" data-key="key"></select>
                     </td>
                 </tr>
             </table>
@@ -569,7 +587,7 @@
                         Outcome Measure
                         <select class="form-control input-sm" data-arg="outcome_measure_second" data-realarg="measure" data-default="3"></select>
                         Player
-                        <select class="form-control input-sm" data-arg="player"></select>
+                        <select class="form-control input-sm" data-arg="player" data-key="key"></select>
                     </td>
                 </tr>
             </table>
