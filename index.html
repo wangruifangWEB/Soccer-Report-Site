@@ -113,9 +113,7 @@
         }
 
         function selectAll(buttonObj, value) {
-            var selectObj = buttonObj.parent().next();
-            selectObj.children('option').prop("selected", value);
-            selectObj.change();
+            $(buttonObj).parent().next().children('option').prop("selected", value).change();
         }
 
         $(document).ready(function() {
@@ -132,11 +130,11 @@
 
             setTimeout(() => {
                 $(".btn-select-none").click(function() {
-                    selectAll($(this), false);
+                    selectAll(this, false);
                 });
 
                 $(".btn-select-all").click(function() {
-                    selectAll($(this), true);
+                    selectAll(this, true);
                 });
             }, 400);
 
@@ -145,6 +143,8 @@
 
                 $(".vis").map(function() {
                     var id = $(this).attr('id');
+
+                    var ready = $(`#${id} select`).length;
 
                     var dataID = id;
                     if ($(this).attr('data-id') !== undefined) {
@@ -201,6 +201,8 @@
                             else {
                                 $(this).find(`option:nth-of-type(${defaultPos})`).prop("selected", true);
                             }
+
+                            ready -= 1;
                         });
                     });
 
@@ -234,45 +236,55 @@
                         return () => $.getJSON(`http://${host}/${dataID}/${target}?${getArgStr()}`, func);
                     }
 
-                    if ($(this).has(".vis-figure").length > 0) {
-                        $.getJSON(`vis/${dataID}.json`, function(response) {
-                            var spec = response;
+                    function init(obj) {
+                        if (ready > 0) {
+                            setTimeout(() => init(obj), 400);
 
-                            var action = getAction(`#${id} .vis-figure`, function(response) {
-                                visualize(`#${id} .vis-figure`, spec, response.data);
+                            return;
+                        }
+
+                        if ($(obj).has(".vis-figure").length > 0) {
+                            $.getJSON(`vis/${dataID}.json`, function(response) {
+                                var spec = response;
+
+                                var action = getAction(`#${id} .vis-figure`, function(response) {
+                                    visualize(`#${id} .vis-figure`, spec, response.data);
+                                });
+
+                                $(`#${id} select`).change(action);
+                                setTimeout(action, 400);
+                            });
+                        }
+
+                        if ($(obj).has(".vis-table").length > 0) {
+                            var table = null;
+
+                            var action = getAction(`#${id} .vis-table`, function(response) {
+                                if (table) {
+                                    table.destroy();
+                                    $(`#${id} .vis-table`).empty();
+                                }
+
+                                table = $(`#${id} .vis-table`).DataTable({
+                                    "data": _.rest(response.data),
+                                    "columns": _.map(response.data[0], v => {
+                                        return {title: v};
+                                    }),
+
+                                    "displayLength": -1,
+                                    "paging": false,
+                                    "ordering": false,
+                                    "info": false,
+                                    "searching": false
+                                })
                             });
 
                             $(`#${id} select`).change(action);
                             setTimeout(action, 400);
-                        });
+                        }
                     }
 
-                    if ($(this).has(".vis-table").length > 0) {
-                        var table = null;
-
-                        var action = getAction(`#${id} .vis-table`, function(response) {
-                            if (table) {
-                                table.destroy();
-                                $(`#${id} .vis-table`).empty();
-                            }
-
-                            table = $(`#${id} .vis-table`).DataTable({
-                                "data": _.rest(response.data),
-                                "columns": _.map(response.data[0], v => {
-                                    return {title: v};
-                                }),
-
-                                "displayLength": -1,
-                                "paging": false,
-                                "ordering": false,
-                                "info": false,
-                                "searching": false
-                            })
-                        });
-
-                        $(`#${id} select`).change(action);
-                        setTimeout(action, 400);
-                    }
+                    init(this);
                 });
             });
         });
@@ -322,7 +334,7 @@
                     </td>
                     <td>
                         Year
-                        <select class="form-control input-sm" data-arg="year" data-default="5" multiple></select>
+                        <select class="form-control input-sm" data-arg="year" data-default="5" size="10" multiple></select>
                     </td>
                 </tr>
             </table>
