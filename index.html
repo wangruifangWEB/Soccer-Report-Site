@@ -23,6 +23,12 @@
             return encodeURIComponent(part).replace(/%20/g, "+");
         }
 
+        function selectAll(buttonObj, value) {
+            var select = $(buttonObj).parent().next();
+            select.children('option').prop("selected", value);
+            select.change();
+        }
+
         function visualize(selector, spec, data) {
             var chart = echarts.init($(selector)[0]);
             var ecSpec = spec.spec;
@@ -126,10 +132,6 @@
             }
 
             chart.setOption(ecSpec, true);
-        }
-
-        function selectAll(buttonObj, value) {
-            $(buttonObj).parent().next().children('option').prop("selected", value).change();
         }
 
         $(document).ready(function() {
