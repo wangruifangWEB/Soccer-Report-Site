@@ -315,6 +315,14 @@
     </script>
 
     <style>
+        .container {
+            max-width: 1000px;
+            padding: 0px;
+        }
+
+        .vis {
+            width: 100%;
+        }
         .vis > table {
             width: 100%;
         }
@@ -326,16 +334,17 @@
 
         .vis select {
             min-width: 50px;
-            max-width: 200px;
+            max-width: 100%;
         }
 
         .vis-figure {
             height: 400px;
             min-width: 400px;
+            width: 100% !important;
         }
 
         .vis-table {
-            min-width: 800px;
+            width: 100% !important;
         }
 
         .vis-table td {
@@ -352,7 +361,7 @@
     </style>
 </head>
 <body>
-    <div class="container" style="max-width: 1000px">
+    <div class="container">
         <div class="vis" id="results_graph">
             <h3>Results Graph</h3>
             <table>
@@ -387,7 +396,7 @@
                 <tr>
                     <td>
                         <div class="vis-figure"></div>
-                        <div style="max-width: 800px; font-size: 12px">
+                        <div style="font-size: 12px">
                             <table class="table table-condensed vis-table" data-target="func_result"></table>
                         </div>
                     </td>
@@ -638,13 +647,15 @@
             <table>
                 <tr>
                     <td>
-                        <div style="overflow: scroll; max-width: 800px;">
+                        <div style="overflow: scroll; width: 800px;">
                             <table class="table table-hover table-condensed vis-table"></table>
                         </div>
                     </td>
                     <td>
                         Minutes
                         <select class="form-control input-sm" data-arg="minutes" data-default="9"></select>
+                        Positions
+                        <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                         Podium
                         <div class="form-inline">
                             <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
