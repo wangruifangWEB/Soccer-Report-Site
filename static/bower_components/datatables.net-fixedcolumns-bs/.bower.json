@@ -42,7 +42,6 @@
     "commit": "aab851c9616b32195468cdf41f2e92ba802e2b94"
   },
   "_source": "https://github.com/DataTables/Dist-DataTables-FixedColumns-Bootstrap.git",
-  "_target": "^3.2.2",
-  "_originalSource": "datatables.net-fixedcolumns-bs",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "datatables.net-fixedcolumns-bs"
 }

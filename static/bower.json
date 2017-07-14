@@ -15,6 +15,7 @@
     "datatables.net-bs": "*",
     "bootswatch": "*",
     "datatables.net-fixedcolumns": "*",
-    "datatables.net-fixedcolumns-bs": "*"
+    "datatables.net-fixedcolumns-bs": "*",
+    "df-visible": "*"
   }
 }

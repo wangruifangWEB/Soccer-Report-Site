@@ -4,6 +4,7 @@
     <meta charset="utf-8">
 
     <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/jquery.visible.min.js"></script>
 
     <script src="static/js/underscore-min.js"></script>
 
@@ -135,7 +136,7 @@
         }
 
         $(document).ready(function() {
-            $(".vis select[multiple]").map(function() {
+            $(".vis select[multiple]").each(function() {
                 $(this).before(
                     `
                     <div style="float: right">
@@ -159,7 +160,7 @@
             $.getJSON("config.json", function(config) {
                 var host = config.host;
 
-                $(".vis").map(function() {
+                $(".vis").each(function() {
                     var id = $(this).attr('id');
 
                     var notReady = $(`#${id} select`).length;
@@ -172,7 +173,7 @@
                     var args = [];
                     var realArgs = [];
 
-                    $(`#${id} select`).map(function() {
+                    $(`#${id} select`).each(function() {
                         var argName = $(this).attr("data-arg");
                         args.push(argName);
                         var realArgName = $(this).attr("data-realarg");
@@ -255,7 +256,7 @@
                     }
 
                     function init(obj) {
-                        if (notReady > 0) {
+                        if (notReady > 0 || !$(obj).visible(true)) {
                             setTimeout(() => init(obj), 400);
 
                             return;
@@ -270,7 +271,7 @@
                                 });
 
                                 $(`#${id} select`).change(action);
-                                setTimeout(action, 400);
+                                action();
                             });
                         }
 
@@ -299,7 +300,7 @@
                             });
 
                             $(`#${id} select`).change(action);
-                            setTimeout(action, 400);
+                            action();
                         }
                     }
 
