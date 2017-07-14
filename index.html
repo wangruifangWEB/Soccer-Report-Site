@@ -30,6 +30,29 @@
             select.change();
         }
 
+        function improveMultiSelects() {
+            $("select[multiple]").each(function() {
+                $(this).before(
+                    `
+                    <div style="float: right">
+                        <button type="button" class="btn btn-xs btn-info btn-select-none">None</button>
+                        <button type="button" class="btn btn-xs btn-info btn-select-all">All</button>
+                    </div>
+                    `
+                );
+            });
+
+            setTimeout(() => {
+                $(".btn-select-none").click(function() {
+                    selectAll(this, false);
+                });
+
+                $(".btn-select-all").click(function() {
+                    selectAll(this, true);
+                });
+            }, 400);
+        }
+
         function visualize(selector, spec, data) {
             var chart = echarts.init($(selector)[0]);
             var ecSpec = spec.spec;
@@ -136,26 +159,7 @@
         }
 
         $(document).ready(function() {
-            $(".vis select[multiple]").each(function() {
-                $(this).before(
-                    `
-                    <div style="float: right">
-                        <button type="button" class="btn btn-xs btn-info btn-select-none">None</button>
-                        <button type="button" class="btn btn-xs btn-info btn-select-all">All</button>
-                    </div>
-                    `
-                );
-            });
-
-            setTimeout(() => {
-                $(".btn-select-none").click(function() {
-                    selectAll(this, false);
-                });
-
-                $(".btn-select-all").click(function() {
-                    selectAll(this, true);
-                });
-            }, 400);
+            improveMultiSelects();
 
             $.getJSON("config.json", function(config) {
                 var host = config.host;
@@ -330,6 +334,10 @@
             min-width: 400px;
         }
 
+        .vis-table {
+            min-width: 800px;
+        }
+
         .vis-table td {
             min-width: 100px;
             white-space: nowrap;
@@ -470,10 +478,10 @@
                             <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
                             <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                         </div>
-                        Positions
-                        <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                         Players
                         <select class="form-control input-sm" data-arg="players" size="10" multiple></select>
+                        Positions
+                        <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                     </td>
                 </tr>
             </table>
@@ -496,10 +504,10 @@
                             <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
                             <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                         </div>
-                        Positions
-                        <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                         Players
                         <select class="form-control input-sm" data-arg="players" size="10" multiple></select>
+                        Positions
+                        <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                     </td>
                 </tr>
             </table>
@@ -522,10 +530,10 @@
                             <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
                             <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                         </div>
-                        Positions
-                        <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                         Players
                         <select class="form-control input-sm" data-arg="players" size="10" multiple></select>
+                        Positions
+                        <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                     </td>
                 </tr>
             </table>
@@ -548,10 +556,10 @@
                             <select class="form-control input-sm" data-arg="podium_op" data-default="2"></select>
                             <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                         </div>
-                        Positions
-                        <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                         Players
                         <select class="form-control input-sm" data-arg="players" size="10" multiple></select>
+                        Positions
+                        <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                     </td>
                 </tr>
             </table>
