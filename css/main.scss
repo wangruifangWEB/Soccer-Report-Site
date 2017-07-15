@@ -1,0 +1,47 @@
+.container {
+    max-width: 1000px;
+    padding: 0px;
+}
+
+.vis {
+    width: 100%;
+
+    > table {
+        width: 100%;
+
+        > tbody > tr > td:last-of-type {
+            width: 200px;
+            vertical-align: top;
+        }
+    }
+
+    select {
+        min-width: 50px;
+        max-width: 100%;
+    }
+}
+
+.vis-figure {
+    height: 400px;
+    min-width: 400px;
+    width: 100% !important;
+}
+
+.vis-table {
+    width: 100% !important;
+
+    td {
+        min-width: 100px;
+        white-space: nowrap;
+    }
+}
+
+#opposition .vis-table {
+    th {
+        border: none;
+    }
+
+    tbody {
+        display: none;
+    }
+}
