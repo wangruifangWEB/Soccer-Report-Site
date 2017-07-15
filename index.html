@@ -13,6 +13,8 @@
 
     <script src="static/js/echarts.min.js"></script>
 
+    <script src='static/js/ecStat.min.js'></script>
+
     <script src="static/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/dataTables.bootstrap.min.css">
     <script src="static/js/dataTables.bootstrap.min.js"></script>
@@ -76,24 +78,43 @@
             };
 
             if ("columnField" in spec) {
-                ecSpec.xAxis.data = _.uniq(_.map(data, r => r[spec.xField]));
+                var clean_data = _.filter(data, r => r["Score"] !== null);
+
+                ecSpec.xAxis.data = _.uniq(_.map(clean_data, r => r[spec.xField]));
+
+                var match_num = _.range(0, ecSpec.xAxis.data.length);
 
                 ecSpec.series = _.map(
-                    _.groupBy(data, r => r[spec.columnField]),
-                    (g, k) => {
-                        return {
-                            name: k,
-                            type: type,
-                            data: _.filter(
-                                _.map(g, r => r[spec.yField]),
-                                score => score !== null
-                            ),
-                            stack: stack,
-                            barMaxWidth: '50',
-                            barGap: "10%"
-                        };
-                    }
-                );
+                    _.groupBy(clean_data, r => r[spec.columnField]),
+                    (g, k) => ({
+                        name: k,
+                        type: type,
+                        data: _.map(g, r => [r[spec.xField].toString(), r[spec.yField]]),
+                        stack: stack,
+                        barMaxWidth: '50',
+                        barGap: "10%"
+                    })
+                ).concat(_.map(
+                    _.groupBy(clean_data, r => r[spec.columnField]),
+                    (g, k) => ({
+                        name: k,
+                        type: "line",
+                        showSymbol: false,
+                        data: _.zip(
+                            _.map(g, r => r[spec.xField].toString()),
+                            _.map(
+                                ecStat.regression(
+                                    'linear',
+                                    _.zip(match_num, _.map(g, r => r[spec.yField]))
+                                ).points,
+                                r => r[1]
+                            )
+                        ),
+                        tooltip: {
+                            show: false
+                        }
+                    })
+                ));
 
                 ecSpec.legend = {
                     data: _.map(data, r => r[spec.columnField])
@@ -108,7 +129,7 @@
                         return {
                             name: k,
                             type: type,
-                            data: _.map(g, r => [r[spec.xField], '' + r[spec.yField]]),
+                            data: _.map(g, r => [r[spec.xField], r[spec.yField].toString()]),
                             stack: stack,
                             barMaxWidth: '50',
                             barGap: "10%"

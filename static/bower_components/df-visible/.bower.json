@@ -43,7 +43,6 @@
     "commit": "6aa4112931480f22a74debf315deb9451eba7c9c"
   },
   "_source": "https://github.com/customd/jquery-visible.git",
-  "_target": "^1.2.0",
-  "_originalSource": "jquery-visible",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "df-visible"
 }

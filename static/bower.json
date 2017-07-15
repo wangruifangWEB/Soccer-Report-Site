@@ -16,6 +16,7 @@
     "bootswatch": "*",
     "datatables.net-fixedcolumns": "*",
     "datatables.net-fixedcolumns-bs": "*",
-    "df-visible": "*"
+    "df-visible": "*",
+    "echarts-stat": "https://github.com/ecomfe/echarts-stat.git"
   }
 }
