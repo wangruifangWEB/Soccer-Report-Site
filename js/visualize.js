@@ -4,6 +4,11 @@ function visualize(selector, spec, data) {
     var type = spec.type;
     var stack = spec.stack;
 
+    ecSpec.grid = {
+        "bottom": 100,
+        "containLabel": "true"
+    };
+
     ecSpec.tooltip = {
         "trigger": "axis",
         "axisPointer" : {
