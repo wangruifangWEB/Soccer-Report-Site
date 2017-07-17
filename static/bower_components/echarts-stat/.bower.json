@@ -9,7 +9,6 @@
     "commit": "b304fa6ce609ce11cabc51aca9fb66a5daa5b74c"
   },
   "_source": "https://github.com/ecomfe/echarts-stat.git",
-  "_target": "^1.1.0",
-  "_originalSource": "https://github.com/ecomfe/echarts-stat.git",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "https://github.com/ecomfe/echarts-stat.git"
 }

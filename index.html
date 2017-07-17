@@ -6,6 +6,8 @@
         <script src="static/js/jquery.min.js"></script>
         <script src="static/js/jquery.visible.min.js"></script>
 
+        <script src="static/js/js.cookie.js"></script>
+
         <script src="static/js/underscore-min.js"></script>
 
         <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
@@ -28,10 +30,25 @@
         <script src='js/visualize.js'></script>
 
         <script type="text/javascript">
+            function cachedJSON(url, key, func) {
+                var response;
+                if (!Cookies.get('cached') || !localStorage.getItem(key)) {
+                    $.getJSON(url, response => {
+                        localStorage.setItem(key, JSON.stringify(response));
+                        Cookies.set('cached', 'true', {expires: 1});
+
+                        func(response);
+                    });
+                } else {
+                    response = JSON.parse(localStorage.getItem(key));
+                    func(response);
+                }
+            }
+
             $(document).ready(function() {
                 improveMultiSelects();
 
-                $.getJSON("config.json", function(config) {
+                cachedJSON("config.json", 'config', function(config) {
                     var host = config.host;
 
                     $(".vis").each(function() {
@@ -39,10 +56,7 @@
 
                         var notReady = $(`#${id} select`).length;
 
-                        var dataID = id;
-                        if ($(this).attr('data-id') !== undefined) {
-                            dataID = $(this).attr('data-id');
-                        }
+                        var dataID = $(this).attr('data-id') || id;
 
                         var args = [];
                         var realArgs = [];
@@ -51,11 +65,9 @@
                             var argName = $(this).attr("data-arg");
                             args.push(argName);
                             var realArgName = $(this).attr("data-realarg");
-                            realArgs.push(realArgName !== undefined ? realArgName : argName);
+                            realArgs.push(realArgName || argName);
 
-                            var defaultPos = $(this).attr("data-default");
-
-                            $.getJSON(`http://${host}/${dataID}/${argName}`, response => {
+                            cachedJSON(`http://${host}/${dataID}/${argName}`, `${dataID}/${argName}`, response => {
                                 var list = response.data;
                                 var options = "";
                                 if (list.length == 0) {
@@ -64,7 +76,7 @@
 
                                 var key = $(this).attr("data-key");
 
-                                if (key === undefined) {
+                                if (!key) {
                                     for (var i = 0; i < list.length; i++) {
                                         options += `<option value="${list[i]}">${list[i]}</option>`;
                                     }
@@ -83,7 +95,8 @@
                                 }
 
                                 $(this).html(options);
-                                if (defaultPos === undefined) {
+                                var defaultPos = $(this).attr("data-default");
+                                if (!defaultPos) {
                                     if ($(this).prop("multiple")) {
                                         $(this).find(`option`).prop("selected", true);
                                     }
@@ -121,12 +134,12 @@
                         }
 
                         function getAction(selector, func) {
-                            var target = $(selector).attr("data-target");
-                            if (target === undefined) {
-                                target = "func";
-                            }
+                            var target = $(selector).attr("data-target") || "func";
 
-                            return () => $.getJSON(`http://${host}/${dataID}/${target}?${getArgStr()}`, func);
+                            return () => {
+                                var argStr = getArgStr();
+                                cachedJSON(`http://${host}/${dataID}/${target}?${argStr}`, `${dataID}/${target}?${argStr}`, func)
+                            };
                         }
 
                         function init(obj) {
@@ -137,7 +150,7 @@
                             }
 
                             if ($(obj).has(".vis-figure").length > 0) {
-                                $.getJSON(`vis/${dataID}.json`, function(response) {
+                                cachedJSON(`vis/${dataID}.json`, dataID, function(response) {
                                     var spec = response;
 
                                     var action = getAction(`#${id} .vis-figure`, function(response) {
