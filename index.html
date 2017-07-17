@@ -48,6 +48,16 @@
             $(document).ready(function() {
                 improveMultiSelects();
 
+                var loadMap = new Map();
+                $(window).scroll(() => {
+                    for (var [obj, f] of loadMap.entries()) {
+                        if ($(obj).visible(true)) {
+                            loadMap.delete(obj);
+                            f();
+                        }
+                    }
+                });
+
                 cachedJSON("config.json", 'config', function(config) {
                     var host = config.host;
 
@@ -143,12 +153,21 @@
                         }
 
                         function init(obj) {
-                            if (notReady > 0 || !$(obj).visible(true)) {
+                            if (notReady > 0) {
                                 setTimeout(() => init(obj), 400);
 
                                 return;
                             }
 
+                            if ($(obj).visible(true)) {
+                                load(obj);
+                            }
+                            else {
+                                loadMap.set(obj, () => load(obj));
+                            }
+                        }
+
+                        function load(obj) {
                             if ($(obj).has(".vis-figure").length > 0) {
                                 cachedJSON(`vis/${dataID}.json`, dataID, function(response) {
                                     var spec = response;
