@@ -29,11 +29,11 @@
 .vis-figure {
     height: 400px;
     min-width: 400px;
-    width: 100%;
+    width: 100% !important;
 }
 
 .vis-table {
-    width: 100%;
+    width: 100% !important;
 
     td {
         min-width: 100px;
@@ -63,7 +63,6 @@
     position: absolute;
     margin: 10px;
     right: 0px;
-    z-index: 1001;
 }
 
 .alert {
@@ -71,6 +70,4 @@
     margin: 10px;
     display: none;
     position: fixed;
-    z-index: 1000;
-    opacity: 0.8;
 }

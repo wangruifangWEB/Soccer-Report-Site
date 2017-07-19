@@ -61,7 +61,7 @@
                     localStorage.clear();
                     Cookies.set('cached', 'true', {expires: 7});
                     $('#syncAlert').show();
-                    setTimeout(() => $('#syncAlert').hide(), 10000);
+                    setTimeout(() => $('#syncAlert').remove(), 10000);
                 }
 
                 $("#refresh button").click(function() {
