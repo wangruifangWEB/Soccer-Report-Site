@@ -10,6 +10,8 @@
 
         <script src="static/js/underscore-min.js"></script>
 
+        <link rel="stylesheet" type="text/css" href="static/css/font-awesome.min.css">
+
         <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
         <script src="static/js/bootstrap.min.js"></script>
 
@@ -33,10 +35,9 @@
         <script type="text/javascript">
             function cachedJSON(url, key, func) {
                 var response;
-                if (!Cookies.get('cached') || !localStorage.getItem(key)) {
+                if (!localStorage.getItem(key)) {
                     $.getJSON(url, response => {
                         localStorage.setItem(key, JSON.stringify(response));
-                        Cookies.set('cached', 'true', {expires: 1});
 
                         func(response);
                     });
@@ -49,6 +50,18 @@
             $(document).ready(function() {
                 improveMultiSelects();
                 improveSelects();
+
+                $('[data-toggle="tooltip"]').tooltip();
+
+                if (!Cookies.get('cached')) {
+                    localStorage.clear();
+                    Cookies.set('cached', 'true', {expires: 7});
+                }
+
+                $(".refresh button").click(function() {
+                    Cookies.remove('cached');
+                    location.reload(true);
+                });
 
                 var loadMap = new Map();
                 $(window).scroll(() => {
@@ -220,6 +233,10 @@
     </head>
 
     <body>
+        <div class="refresh">
+            <button class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Sync"><i class="fa fa-refresh"></i></button>
+        </div>
+
         <div class="container">
             <div class="vis" id="results_graph">
                 <h3>Results Graph</h3>
