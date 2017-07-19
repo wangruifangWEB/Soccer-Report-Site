@@ -9,7 +9,12 @@
     > table {
         width: 100%;
 
+        > tbody > tr > td:first-of-type {
+            max-width: 800px;
+        }
+
         > tbody > tr > td:last-of-type {
+            min-width: 200px;
             width: 200px;
             vertical-align: top;
         }
@@ -24,11 +29,11 @@
 .vis-figure {
     height: 400px;
     min-width: 400px;
-    width: 100% !important;
+    width: 100%;
 }
 
 .vis-table {
-    width: 100% !important;
+    width: 100%;
 
     td {
         min-width: 100px;
@@ -54,8 +59,18 @@
     right: 18px;
 }
 
-.refresh {
+#refresh {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    margin: 10px;
+    right: 0px;
+    z-index: 1001;
+}
+
+.alert {
+    padding: 10px;
+    margin: 10px;
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    opacity: 0.8;
 }

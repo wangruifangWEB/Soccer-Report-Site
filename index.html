@@ -40,7 +40,11 @@
                         localStorage.setItem(key, JSON.stringify(response));
 
                         func(response);
-                    });
+                    }).done(
+                        () => $('#offlineAlert').hide()
+                    ).fail(
+                        () => $('#offlineAlert').show()
+                    );
                 } else {
                     response = JSON.parse(localStorage.getItem(key));
                     func(response);
@@ -56,9 +60,11 @@
                 if (!Cookies.get('cached')) {
                     localStorage.clear();
                     Cookies.set('cached', 'true', {expires: 7});
+                    $('#syncAlert').show();
+                    setTimeout(() => $('#syncAlert').hide(), 10000);
                 }
 
-                $(".refresh button").click(function() {
+                $("#refresh button").click(function() {
                     Cookies.remove('cached');
                     location.reload(true);
                 });
@@ -205,12 +211,16 @@
                                 var table = null;
 
                                 var action = getAction(`#${id} .vis-table`, function(response) {
+                                    var tableSelected = $(`#${id} .vis-table`);
+
                                     if (table) {
                                         table.destroy();
-                                        $(`#${id} .vis-table`).empty();
+                                        tableSelected.empty();
                                     }
 
-                                    table = $(`#${id} .vis-table`).DataTable({
+                                    var actives = tableSelected.attr("data-actives");
+
+                                    table = tableSelected.DataTable({
                                         "data": _.rest(response.data),
                                         "columns": _.map(response.data[0], v => ({title: v})),
                                         "displayLength": -1,
@@ -222,7 +232,13 @@
                                         "scrollX": true,
                                         "scrollCollapse": true,
                                         "fixedColumns": true
-                                    })
+                                    });
+
+                                    if (actives) {
+                                        _.each(actives.split(' '), p => {
+                                            $(`#${id} .vis-table tbody tr:nth-last-child(${-parseInt(p)})`).addClass('active');
+                                        });
+                                    }
                                 });
 
                                 $(`#${id} select`).change(action);
@@ -238,8 +254,17 @@
     </head>
 
     <body>
-        <div class="refresh">
+        <div id="refresh">
             <button class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Sync"><i class="fa fa-refresh"></i></button>
+        </div>
+
+        <div id="offlineAlert" class="alert alert-danger">
+            <i class="fa fa-plane"></i> Offline.
+        </div>
+
+        <div id="syncAlert" class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <i class="fa fa-refresh fa-spin"></i> Syncing...
         </div>
 
         <div class="container">
@@ -528,8 +553,8 @@
                 <table>
                     <tr>
                         <td>
-                            <div style="overflow: scroll; width: 800px;">
-                                <table class="table table-hover table-condensed vis-table"></table>
+                            <div style="overflow: scroll;">
+                                <table class="table table-hover table-condensed vis-table" data-actives="-3 -2 -1"></table>
                             </div>
                         </td>
                         <td>
