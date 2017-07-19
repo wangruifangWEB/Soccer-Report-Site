@@ -1,6 +1,6 @@
 function selectAll(buttonObj, value) {
     var select = $(buttonObj).parent().next();
-    select.children('option').prop("selected", value);
+    select.find('option').prop("selected", value);
     select.change();
 }
 

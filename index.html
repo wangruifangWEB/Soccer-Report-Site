@@ -130,7 +130,12 @@
                                     }
                                 }
                                 else {
-                                    $(this).find(`option:nth-of-type(${defaultPos})`).prop("selected", true);
+                                    if (!key) {
+                                        $(this).find(`option:nth-of-type(${defaultPos})`).prop("selected", true);
+                                    }
+                                    else {
+                                        $(this).find(`optgroup:nth-of-type(${defaultPos}) > option:first-of-type`).prop("selected", true);
+                                    }
                                 }
 
                                 notReady -= 1;
@@ -461,7 +466,7 @@
                             Control Measure
                             <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
                             Player
-                            <select class="form-control input-sm" data-arg="player" data-key="key"></select>
+                            <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -478,7 +483,7 @@
                             Process Measure
                             <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
                             Player
-                            <select class="form-control input-sm" data-arg="player" data-key="key"></select>
+                            <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -495,7 +500,7 @@
                             Outcome Measure
                             <select class="form-control input-sm" data-arg="outcome_measure_first" data-realarg="measure" data-default="7"></select>
                             Player
-                            <select class="form-control input-sm" data-arg="player" data-key="key"></select>
+                            <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -512,7 +517,7 @@
                             Outcome Measure
                             <select class="form-control input-sm" data-arg="outcome_measure_second" data-realarg="measure" data-default="3"></select>
                             Player
-                            <select class="form-control input-sm" data-arg="player" data-key="key"></select>
+                            <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
