@@ -27,6 +27,7 @@
 
         <script src='js/aux.js'></script>
         <script src='js/multiselect.js'></script>
+        <script src='js/select.js'></script>
         <script src='js/visualize.js'></script>
 
         <script type="text/javascript">
@@ -47,6 +48,7 @@
 
             $(document).ready(function() {
                 improveMultiSelects();
+                improveSelects();
 
                 var loadMap = new Map();
                 $(window).scroll(() => {
@@ -347,7 +349,7 @@
                             Players
                             <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
                             Positions
-                            <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
+                            <select class="form-control input-sm" data-arg="positions" data-default="3" size="4" multiple></select>
                         </td>
                     </tr>
                 </table>
@@ -373,7 +375,7 @@
                             Players
                             <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
                             Positions
-                            <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
+                            <select class="form-control input-sm" data-arg="positions" data-default="3" size="4" multiple></select>
                         </td>
                     </tr>
                 </table>
@@ -399,7 +401,7 @@
                             Players
                             <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
                             Positions
-                            <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
+                            <select class="form-control input-sm" data-arg="positions" data-default="3" size="4" multiple></select>
                         </td>
                     </tr>
                 </table>
@@ -425,7 +427,7 @@
                             Players
                             <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
                             Positions
-                            <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
+                            <select class="form-control input-sm" data-arg="positions" data-default="3" size="4" multiple></select>
                         </td>
                     </tr>
                 </table>

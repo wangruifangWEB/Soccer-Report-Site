@@ -45,3 +45,11 @@
         display: none;
     }
 }
+
+.label {
+    pointer-events: none;
+    position: relative;
+    float: right;
+    top: 28px;
+    right: 18px;
+}
