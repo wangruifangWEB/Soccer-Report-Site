@@ -71,3 +71,13 @@
     display: none;
     position: fixed;
 }
+
+.nav {
+    width: 250px;
+    margin: auto;
+    padding: 10px;
+}
+
+tr, button, a {
+    transition: 0.2s;
+}

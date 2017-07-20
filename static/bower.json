@@ -18,6 +18,7 @@
     "datatables.net-fixedcolumns-bs": "*",
     "df-visible": "*",
     "echarts-stat": "https://github.com/ecomfe/echarts-stat.git",
-    "js-cookie": "^2.1.4"
+    "js-cookie": "*",
+    "urijs": "*"
   }
 }
