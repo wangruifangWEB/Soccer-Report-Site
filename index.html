@@ -59,10 +59,11 @@
                 $(`.nav li:nth-child(${!globalPerGame ? 1 : 2})`).addClass("active");
 
                 var opponent = "";
+                var date = "";
                 $('#pergame_info_opponent').change(function() {
                     opponent = $(this).val();
+                    date = "";
                 });
-                var date = "";
                 $('#pergame_info_date').change(function() {
                     date = $(this).val();
                 });
@@ -100,13 +101,20 @@
                     var host = config.host;
 
                     $(".vis").each(function() {
+                        if (globalPerGame && $(this).data('pergame') == "regular") {
+                            return;
+                        }
+                        if (!globalPerGame && $(this).data('pergame') == "pergame") {
+                            return;
+                        }
+
+                        var perGame = $(this).data('pergame') != "regular";
+
                         var id = $(this).attr('id');
 
                         var notReady = $(`#${id} select`).length;
 
                         var dataID = $(this).data('id') || id;
-
-                        var perGame = $(this).data('pergame') != "regular";
 
                         var args = [];
                         var realArgs = [];
@@ -126,6 +134,9 @@
                                 }
 
                                 cachedJSON(`http://${host}/${dataID}/${argName}${dependingStr}`, response => {
+                                    $(selectObj).prev("label").addClass("bg-success");
+                                    setTimeout(() => $(selectObj).prev("label").removeClass("bg-success"), 400);
+
                                     var list = response.data;
                                     var options = "";
                                     if (list.length == 0) {
@@ -152,7 +163,7 @@
                                         });
                                     }
 
-                                    $(selectObj).html($(selectObj).html() + options);
+                                    $(selectObj).html(options);
                                     var defaultPos = $(selectObj).data("default");
                                     if (!defaultPos) {
                                         if ($(selectObj).prop("multiple")) {
@@ -240,7 +251,6 @@
 
                                     $(`#${id} select`).change(action);
                                     if (globalPerGame && perGame) {
-                                        $('#pergame_info_opponent').change(action);
                                         $('#pergame_info_date').change(action);
                                     }
                                     action();
@@ -283,7 +293,6 @@
 
                                 $(`#${id} select`).change(action);
                                 if (globalPerGame && perGame) {
-                                    $('#pergame_info_opponent').change(action);
                                     $('#pergame_info_date').change(action);
                                 }
                                 action();
@@ -318,10 +327,10 @@
 
             <div class="vis" id="pergame_info" data-pergame="pergame">
                 <div class="form-inline">
-                    Opponent
+                    <label>Opponent</label>
                     <select id="pergame_info_opponent" class="form-control input-sm" data-arg="opponent"></select>
-                    Date
-                    <select class="form-control input-sm" data-arg="date" data-depends="opponent"></select>
+                    <label>Date</label>
+                    <select id="pergame_info_date" class="form-control input-sm" data-arg="date" data-depends="opponent"></select>
                 </div>
             </div>
 
@@ -333,7 +342,7 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Year
+                            <label>Year</label>
                             <select class="form-control input-sm" data-arg="year" data-default="7" size="10" multiple></select>
                         </td>
                     </tr>
@@ -364,9 +373,9 @@
                             </div>
                         </td>
                         <td>
-                            Measure
+                            <label>Measure</label>
                             <select class="form-control input-sm" data-arg="measure" data-default="6"></select>
-                            Opponent
+                            <label>Opponent</label>
                             <select class="form-control input-sm" data-arg="opponent"></select>
                         </td>
                     </tr>
@@ -381,9 +390,9 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Control Measure
+                            <label>Control Measure</label>
                             <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
-                            Podium
+                            <label>Podium</label>
                             <div class="form-inline">
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
@@ -401,9 +410,9 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Process Measure
+                            <label>Process Measure</label>
                             <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="5"></select>
-                            Podium
+                            <label>Podium</label>
                             <div class="form-inline">
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
@@ -421,9 +430,9 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Outcome Measure
+                            <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure" data-realarg="measure" data-default="12"></select>
-                            Podium
+                            <label>Podium</label>
                             <div class="form-inline">
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
@@ -441,9 +450,9 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Final Acts Quality Measure
+                            <label>Final Acts Quality Measure</label>
                             <select class="form-control input-sm" data-arg="final_measure" data-realarg="measure" data-default="3"></select>
-                            Podium
+                            <label>Podium</label>
                             <div class="form-inline">
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
@@ -461,18 +470,18 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Control Measure
+                            <label>Control Measure</label>
                             <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
-                            Podium
+                            <label>Podium</label>
                             <div class="form-inline">
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
-                            Players
+                            <label>Players</label>
                             <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
-                            Minutes Played
+                            <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
-                            Positions
+                            <label>Positions</label>
                             <select class="form-control input-sm" data-arg="positions" data-default="3" size="4" multiple></select>
                         </td>
                     </tr>
@@ -487,18 +496,18 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Process Measure
+                            <label>Process Measure</label>
                             <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
-                            Podium
+                            <label>Podium</label>
                             <div class="form-inline">
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
-                            Players
+                            <label>Players</label>
                             <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
-                            Minutes Played
+                            <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
-                            Positions
+                            <label>Positions</label>
                             <select class="form-control input-sm" data-arg="positions" data-default="3" size="4" multiple></select>
                         </td>
                     </tr>
@@ -513,18 +522,18 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Outcome Measure
+                            <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure" data-realarg="measure" data-default="12"></select>
-                            Podium
+                            <label>Podium</label>
                             <div class="form-inline">
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
-                            Players
+                            <label>Players</label>
                             <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
-                            Minutes Played
+                            <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
-                            Positions
+                            <label>Positions</label>
                             <select class="form-control input-sm" data-arg="positions" data-default="3" size="4" multiple></select>
                         </td>
                     </tr>
@@ -539,18 +548,18 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Final Acts Quality Measure
+                            <label>Final Acts Quality Measure</label>
                             <select class="form-control input-sm" data-arg="final_measure" data-realarg="measure" data-default="3"></select>
-                            Podium
+                            <label>Podium</label>
                             <div class="form-inline">
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
-                            Players
+                            <label>Players</label>
                             <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
-                            Minutes Played
+                            <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
-                            Positions
+                            <label>Positions</label>
                             <select class="form-control input-sm" data-arg="positions" data-default="3" size="4" multiple></select>
                         </td>
                     </tr>
@@ -565,9 +574,9 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Control Measure
+                            <label>Control Measure</label>
                             <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
-                            Player
+                            <label>Player</label>
                             <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
                         </td>
                     </tr>
@@ -582,9 +591,9 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Process Measure
+                            <label>Process Measure</label>
                             <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
-                            Player
+                            <label>Player</label>
                             <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
                         </td>
                     </tr>
@@ -599,9 +608,9 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Outcome Measure
+                            <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure_first" data-realarg="measure" data-default="7"></select>
-                            Player
+                            <label>Player</label>
                             <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
                         </td>
                     </tr>
@@ -616,9 +625,9 @@
                             <div class="vis-figure"></div>
                         </td>
                         <td>
-                            Outcome Measure
+                            <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure_second" data-realarg="measure" data-default="3"></select>
-                            Player
+                            <label>Player</label>
                             <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
                         </td>
                     </tr>
@@ -635,14 +644,14 @@
                             </div>
                         </td>
                         <td>
-                            Podium
+                            <label>Podium</label>
                             <div class="form-inline">
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
-                            Minutes Played
+                            <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
-                            Positions
+                            <label>Positions</label>
                             <select class="form-control input-sm" data-arg="positions" size="4" multiple></select>
                         </td>
                     </tr>

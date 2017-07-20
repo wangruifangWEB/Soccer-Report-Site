@@ -55,5 +55,5 @@
   margin: auto;
   padding: 10px; }
 
-tr, button, a {
+label, tr, button, a {
   transition: 0.2s; }
