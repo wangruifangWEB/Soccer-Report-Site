@@ -37,7 +37,7 @@ function visualize(selector, spec, data) {
             (g, k) => ({
                 name: k,
                 type: type,
-                data: _.map(g, r => [r[spec.xField].toString(), r[spec.yField]]),
+                data: _.map(g, r => [r[spec.xField].toString(), r[spec.yField].toFixed(2)]),
                 stack: stack,
                 barMaxWidth: '50',
                 barGap: "10%"
@@ -101,10 +101,10 @@ function visualize(selector, spec, data) {
             );
 
         ecSpec.series = [{
-            data: _.filter(
+            data: _.map(_.filter(
                 _.map(data, r => r[spec.yField]),
                 score => score !== null
-            ),
+            ), score => score.toFixed(2)),
             type: type,
             barMaxWidth: '50',
             barGap: "10%",
