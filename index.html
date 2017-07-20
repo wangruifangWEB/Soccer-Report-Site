@@ -134,8 +134,10 @@
                                 }
 
                                 cachedJSON(`http://${host}/${dataID}/${argName}${dependingStr}`, response => {
-                                    $(selectObj).prev("label").addClass("bg-success");
-                                    setTimeout(() => $(selectObj).prev("label").removeClass("bg-success"), 400);
+                                    if (depends) {
+                                        $(selectObj).addClass("updated");
+                                        setTimeout(() => $(selectObj).removeClass("updated"), 400);
+                                    }
 
                                     var list = response.data;
                                     var options = "";
@@ -326,12 +328,28 @@
             </ul>
 
             <div class="vis" id="pergame_info" data-pergame="pergame">
-                <div class="form-inline">
-                    <label>Opponent</label>
-                    <select id="pergame_info_opponent" class="form-control input-sm" data-arg="opponent"></select>
-                    <label>Date</label>
-                    <select id="pergame_info_date" class="form-control input-sm" data-arg="date" data-depends="opponent"></select>
-                </div>
+                <table>
+                    <tr>
+                        <td style="width: 400px; text-align: right">
+                            <span class="country">Canada</span>
+                        </td>
+                        <td style="width: 200px; text-align: center">
+                            v.s.
+                        </td>
+                        <td style="width: 400px">
+                            <select id="pergame_info_opponent" class="country form-control input-sm" data-arg="opponent"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <select id="pergame_info_date" class="form-control input-sm" data-arg="date" data-depends="opponent"></select>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
             <div class="vis" id="results_graph" data-pergame="regular">

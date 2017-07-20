@@ -78,6 +78,27 @@
     padding: 10px;
 }
 
-label, tr, button, a {
+tr, button, a, input, select {
     transition: 0.2s;
+}
+
+#pergame_info {
+    text-align: center;
+
+    select {
+        border: none;
+        background: none;
+        box-shadow: none;
+        padding: 0px;
+        vertical-align: middle;
+        width: initial;
+    }
+
+    select.updated {
+        background-color: #dff0d8;
+    }
+
+    .country {
+        font-size: 24px;
+    }
 }
