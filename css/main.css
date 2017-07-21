@@ -58,16 +58,19 @@
 tr, button, a, input, select {
   transition: 0.2s; }
 
+select:hover {
+  background-color: #eee; }
+
 #pergame_info {
   text-align: center; }
+  #pergame_info td {
+    vertical-align: middle; }
   #pergame_info select {
     border: none;
-    background: none;
     box-shadow: none;
     padding: 0px;
-    vertical-align: middle;
-    width: initial; }
+    width: initial;
+    font-size: inherit;
+    height: 100%; }
   #pergame_info select.updated {
     background-color: #dff0d8; }
-  #pergame_info .country {
-    font-size: 24px; }
