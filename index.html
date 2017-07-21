@@ -149,7 +149,7 @@
 
                                     if (!key) {
                                         for (var i = 0; i < list.length; i++) {
-                                            options += `<option value="${list[i]}">${list[i]}</option>`;
+                                            options += list[i] == '-' ? "<option disabled>-</option>" : `<option value="${list[i]}">${list[i]}</option>`;
                                         }
                                     }
                                     else {
@@ -158,7 +158,7 @@
 
                                             localList = _.map(l, o => o.value);
                                             for (var i = 0; i < localList.length; i++) {
-                                                options += `<option value="${localList[i]}">${localList[i]}</option>`;
+                                                options += list[i] == '-' ? "<option disabled>-</option>" : `<option value="${localList[i]}">${localList[i]}</option>`;
                                             }
 
                                             options += `</optgroup>`;
