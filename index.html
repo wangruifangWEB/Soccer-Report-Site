@@ -405,7 +405,7 @@
                 </table>
             </div>
 
-            <div class="vis" id="opposition" data-pergame="regular">
+            <div class="vis" id="opposition_regular" data-id="opposition" data-pergame="regular">
                 <h3>Opposition Analysis</h3>
                 <table>
                     <tr>
@@ -420,6 +420,24 @@
                             <select class="form-control input-sm" data-arg="measure" data-default="6"></select>
                             <label>Opponent</label>
                             <select class="form-control input-sm" data-arg="opponent"></select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="vis" id="opposition_pergame" data-id="opposition" data-pergame="pergame">
+                <h3>Opposition Analysis</h3>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="vis-figure"></div>
+                            <div style="font-size: 12px">
+                                <table class="table table-condensed vis-table" data-target="func_result"></table>
+                            </div>
+                        </td>
+                        <td>
+                            <label>Measure</label>
+                            <select class="form-control input-sm" data-arg="measure" data-default="6"></select>
                         </td>
                     </tr>
                 </table>

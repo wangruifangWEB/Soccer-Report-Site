@@ -27,9 +27,9 @@
     min-width: 100px;
     white-space: nowrap; }
 
-#opposition .vis-table th {
+#opposition_regular .vis-table th, #opposition_pergame .vis-table th {
   border: none; }
-#opposition .vis-table tbody {
+#opposition_regular .vis-table tbody, #opposition_pergame .vis-table tbody {
   display: none; }
 
 .label {
