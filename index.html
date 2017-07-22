@@ -148,25 +148,28 @@
                                     var key = $(selectObj).data("key");
 
                                     if (!key) {
-                                        for (var i = 0; i < list.length; i++) {
-                                            options += list[i] == '-' ? "<option disabled>-</option>" : `<option value="${list[i]}">${list[i]}</option>`;
-                                        }
+                                        _.each(list, o => {
+                                            options += `<option value="${o}">${o}</option>`;
+                                        });
                                     }
                                     else {
-                                        _.map(_.groupBy(list, o => o.key), (l, g) => {
+                                        _.each(_.filter(list, o => !o.key), o => {
+                                            options += `<option value="${o.value}">${o.value}</option>`;
+                                        });
+
+                                        _.each(_.groupBy(_.filter(list, o => o.key), o => o.key), (l, g) => {
                                             options += `<optgroup label="${g}">`;
 
-                                            localList = _.map(l, o => o.value);
-                                            for (var i = 0; i < localList.length; i++) {
-                                                options += list[i] == '-' ? "<option disabled>-</option>" : `<option value="${localList[i]}">${localList[i]}</option>`;
-                                            }
+                                            _.each(l, o => {
+                                                options += `<option value="${o.value}">${o.value}</option>`;
+                                            });
 
                                             options += `</optgroup>`;
                                         });
                                     }
 
                                     $(selectObj).html(options);
-                                    var defaultPos = $(selectObj).data("default");
+                                    var defaultPos = parseInt($(selectObj).data("default"));
                                     if (!defaultPos) {
                                         if ($(selectObj).prop("multiple")) {
                                             $(selectObj).find(`option`).prop("selected", true);
@@ -177,10 +180,11 @@
                                     }
                                     else {
                                         if (!key) {
-                                            $(selectObj).find(`option:nth-of-type(${defaultPos})`).prop("selected", true);
+                                            $(selectObj).find(`option:nth-${defaultPos >= 0 ? '' : 'last-'}of-type(${Math.abs(defaultPos)})`).prop("selected", true);
                                         }
                                         else {
-                                            $(selectObj).find(`optgroup:nth-of-type(${defaultPos}) > option:first-of-type`).prop("selected", true);
+                                            $(selectObj).find(`optgroup:nth-${defaultPos >= 0 ? '' : 'last-'}of-type(${Math.abs(defaultPos)}) > option:first-of-type`).prop("selected", true);
+                                            console.log(id, Math.abs(defaultPos));
                                         }
                                     }
                                     $(selectObj).trigger("change");
@@ -353,7 +357,7 @@
                         </td>
                         <td>
                             <h3>
-                                <select id="pergame_info_date" class="form-control input-sm" data-arg="date" data-depends="opponent"></select>
+                                <select id="pergame_info_date" class="form-control input-sm" data-arg="date" data-depends="opponent" data-key="nolabel" data-default="-1"></select>
                             </h3>
                         </td>
                     </tr>
@@ -503,7 +507,7 @@
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -529,7 +533,7 @@
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -555,7 +559,7 @@
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -581,7 +585,7 @@
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-key="key" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -602,7 +606,7 @@
                             <label>Control Measure</label>
                             <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -619,7 +623,7 @@
                             <label>Process Measure</label>
                             <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -636,7 +640,7 @@
                             <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure_first" data-realarg="measure" data-default="7"></select>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -653,7 +657,7 @@
                             <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure_second" data-realarg="measure" data-default="3"></select>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-key="key" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>

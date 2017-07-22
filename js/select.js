@@ -5,7 +5,7 @@ function updateTag(selectObj) {
 
 function improveSelects() {
     $("select").not("[multiple]").filter(function() {
-        return $(this).attr("data-key");
+        return $(this).attr("data-key") == "label";
     }).each(function() {
         $(this).before(
             `
