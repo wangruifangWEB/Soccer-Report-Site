@@ -55,7 +55,7 @@
 
             $(document).ready(function() {
                 var uri = URI(window.location.href);
-                var globalPerGame = uri.hasQuery("pergame");
+                var globalPerGame = uri.query(true).pergame == 'true';
                 $(`.nav li:nth-child(${!globalPerGame ? 1 : 2})`).addClass("active");
 
                 var opponent = "";
@@ -184,7 +184,6 @@
                                         }
                                         else {
                                             $(selectObj).find(`optgroup:nth-${defaultPos >= 0 ? '' : 'last-'}of-type(${Math.abs(defaultPos)}) > option:first-of-type`).prop("selected", true);
-                                            console.log(id, Math.abs(defaultPos));
                                         }
                                     }
                                     $(selectObj).trigger("change");
@@ -247,6 +246,18 @@
                         }
 
                         function load(obj) {
+                            if ($(obj).has(".vis-text").length > 0) {
+                                var action = getAction(`#${id} .vis-text`, function(response) {
+                                    $(`#${id} .vis-text`).html(response.data);
+                                });
+
+                                $(`#${id} select`).change(action);
+                                if (globalPerGame && perGame) {
+                                    $('#pergame_info_date').change(action);
+                                }
+                                action();
+                            }
+
                             if ($(obj).has(".vis-figure").length > 0) {
                                 cachedJSON(`vis/${dataID}.json`, function(response) {
                                     var spec = response;
@@ -328,7 +339,7 @@
         <div class="container">
             <ul class="nav nav-pills nav-justified">
                 <li role="presentation"><a href="/">Regular</a></li>
-                <li role="presentation"><a href="/?pergame=">Per Game</a></li>
+                <li role="presentation"><a href="/?pergame=true">Per Game</a></li>
             </ul>
 
             <div class="vis" id="pergame_info" data-pergame="pergame">
@@ -351,7 +362,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="text-align: right">
+                            <h3>
+                                <span class="vis-text"></span>
+                            </h3>
                         </td>
                         <td>
                         </td>
