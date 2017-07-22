@@ -55,7 +55,7 @@
   margin: auto;
   padding: 10px; }
 
-tr, button, a, input, select {
+tr, button, a, input, select, .viz-text {
   transition: 0.2s; }
 
 select:hover {
@@ -72,5 +72,5 @@ select:hover {
     width: initial;
     font-size: inherit;
     height: 100%; }
-  #pergame_info select.updated {
+  #pergame_info .updated {
     background-color: #dff0d8; }

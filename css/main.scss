@@ -78,7 +78,7 @@
     padding: 10px;
 }
 
-tr, button, a, input, select {
+tr, button, a, input, select, .viz-text {
     transition: 0.2s;
 }
 
@@ -102,7 +102,7 @@ select:hover {
         height: 100%;
     }
 
-    select.updated {
+    .updated {
         background-color: #dff0d8;
     }
 }

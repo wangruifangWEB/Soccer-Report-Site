@@ -127,7 +127,7 @@
 
                             var depends = $(this).data("depends");
 
-                            function prepare(selectObj) {
+                            function prepare(selectElem) {
                                 var dependingStr = ""
                                 if (depends) {
                                     dependingStr = "?" + _.map(depends.split(' '), s => s + "=" + $(`#${id} select[data-arg="${s}"]`).val()).join('&');
@@ -135,8 +135,8 @@
 
                                 cachedJSON(`http://${host}/${dataID}/${argName}${dependingStr}`, response => {
                                     if (depends) {
-                                        $(selectObj).addClass("updated");
-                                        setTimeout(() => $(selectObj).removeClass("updated"), 400);
+                                        $(selectElem).addClass("updated");
+                                        setTimeout(() => $(selectElem).removeClass("updated"), 400);
                                     }
 
                                     var list = response.data;
@@ -145,7 +145,7 @@
                                         return;
                                     }
 
-                                    var key = $(selectObj).data("key");
+                                    var key = $(selectElem).data("key");
 
                                     if (!key) {
                                         _.each(list, o => {
@@ -168,25 +168,25 @@
                                         });
                                     }
 
-                                    $(selectObj).html(options);
-                                    var defaultPos = parseInt($(selectObj).data("default"));
+                                    $(selectElem).html(options);
+                                    var defaultPos = parseInt($(selectElem).data("default"));
                                     if (!defaultPos) {
-                                        if ($(selectObj).prop("multiple")) {
-                                            $(selectObj).find(`option`).prop("selected", true);
+                                        if ($(selectElem).prop("multiple")) {
+                                            $(selectElem).find(`option`).prop("selected", true);
                                         }
                                         else {
-                                            $(selectObj).find(`option:first-of-type`).prop("selected", true);
+                                            $(selectElem).find(`option:first-of-type`).prop("selected", true);
                                         }
                                     }
                                     else {
                                         if (!key) {
-                                            $(selectObj).find(`option:nth-${defaultPos >= 0 ? '' : 'last-'}of-type(${Math.abs(defaultPos)})`).prop("selected", true);
+                                            $(selectElem).find(`option:nth-${defaultPos >= 0 ? '' : 'last-'}of-type(${Math.abs(defaultPos)})`).prop("selected", true);
                                         }
                                         else {
-                                            $(selectObj).find(`optgroup:nth-${defaultPos >= 0 ? '' : 'last-'}of-type(${Math.abs(defaultPos)}) > option:first-of-type`).prop("selected", true);
+                                            $(selectElem).find(`optgroup:nth-${defaultPos >= 0 ? '' : 'last-'}of-type(${Math.abs(defaultPos)}) > option:first-of-type`).prop("selected", true);
                                         }
                                     }
-                                    $(selectObj).trigger("change");
+                                    $(selectElem).trigger("change");
 
                                     notReady -= 1;
                                 });
@@ -248,7 +248,11 @@
                         function load(obj) {
                             if ($(obj).has(".vis-text").length > 0) {
                                 var action = getAction(`#${id} .vis-text`, function(response) {
-                                    $(`#${id} .vis-text`).html(response.data);
+                                    var textObj = $(`#${id} .vis-text`);
+                                    textObj.addClass("updated");
+                                    setTimeout(() => textObj.removeClass("updated"), 400);
+
+                                    textObj.html(response.data);
                                 });
 
                                 $(`#${id} select`).change(action);
@@ -278,16 +282,16 @@
                                 var table = null;
 
                                 var action = getAction(`#${id} .vis-table`, function(response) {
-                                    var tableSelected = $(`#${id} .vis-table`);
+                                    var tableObj = $(`#${id} .vis-table`);
 
                                     if (table) {
                                         table.destroy();
-                                        tableSelected.empty();
+                                        tableObj.empty();
                                     }
 
-                                    var actives = tableSelected.data("actives");
+                                    var actives = tableObj.data("actives");
 
-                                    table = tableSelected.DataTable({
+                                    table = tableObj.DataTable({
                                         "data": _.rest(response.data),
                                         "columns": _.map(response.data[0], v => ({title: v})),
                                         "displayLength": -1,
