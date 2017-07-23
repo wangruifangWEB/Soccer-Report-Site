@@ -130,7 +130,15 @@
                             function prepare(selectElem) {
                                 var dependingStr = ""
                                 if (depends) {
-                                    dependingStr = "?" + _.map(depends.split(' '), s => s + "=" + $(`#${id} select[data-arg="${s}"]`).val()).join('&');
+                                    dependingStr = _.filter(_.map(depends.split(' '), s => {
+                                        var obj = $(`select#${s}`);
+
+                                        return obj.val() === null ? "" : `${obj.data("arg")}=${obj.val()}`;
+                                    }), s => s.length > 0).join('&');
+
+                                    if (dependingStr.length > 0) {
+                                        dependingStr = "?" + dependingStr
+                                    }
                                 }
 
                                 cachedJSON(`http://${host}/${dataID}/${argName}${dependingStr}`, response => {
@@ -195,7 +203,7 @@
                             prepare(this);
 
                             if (depends) {
-                                _.each(depends.split(' '), s => $(`#${id} select[data-arg="${s}"]`).change(() => prepare(this)));
+                                _.each(depends.split(' '), s => $(`select#${s}`).change(() => prepare(this)));
                             }
                         });
 
@@ -375,7 +383,7 @@
                         </td>
                         <td>
                             <h3>
-                                <select id="pergame_info_date" class="form-control input-sm" data-arg="date" data-depends="opponent" data-key="nolabel" data-default="-1"></select>
+                                <select id="pergame_info_date" class="form-control input-sm" data-arg="date" data-depends="pergame_info_opponent" data-key="nolabel" data-default="-1"></select>
                             </h3>
                         </td>
                     </tr>
@@ -543,7 +551,7 @@
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-key="nolabel" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -569,7 +577,7 @@
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-key="nolabel" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -595,7 +603,7 @@
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-key="nolabel" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -621,7 +629,7 @@
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-key="nolabel" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -642,7 +650,7 @@
                             <label>Control Measure</label>
                             <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-key="label" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -659,7 +667,7 @@
                             <label>Process Measure</label>
                             <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-key="label" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -676,7 +684,7 @@
                             <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure_first" data-realarg="measure" data-default="7"></select>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-key="label" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -693,7 +701,7 @@
                             <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure_second" data-realarg="measure" data-default="3"></select>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-key="label" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
