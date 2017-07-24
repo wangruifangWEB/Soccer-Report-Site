@@ -63,6 +63,8 @@ select:hover {
 
 #pergame_info {
   text-align: center; }
+  #pergame_info h1, #pergame_info h3 {
+    display: inline-block; }
   #pergame_info td {
     vertical-align: middle; }
   #pergame_info select {

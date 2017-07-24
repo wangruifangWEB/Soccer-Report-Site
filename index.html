@@ -58,15 +58,16 @@
                 var globalPerGame = uri.query(true).pergame == 'true';
                 $(`.nav li:nth-child(${!globalPerGame ? 1 : 2})`).addClass("active");
 
-                var opponent = "";
-                var date = "";
-                $('#pergame_info_opponent').change(function() {
-                    opponent = $(this).val();
-                    date = "";
-                });
-                $('#pergame_info_date').change(function() {
-                    date = $(this).val();
-                });
+                $('#pergame_info_date_flag').change(function() {
+                    if ($(this).prop("checked")) {
+                        $('#pergame_info_opponent').hide();
+                        $('#pergame_info_opponent_status').show();
+                    }
+                    else {
+                        $('#pergame_info_opponent').show();
+                        $('#pergame_info_opponent_status').hide();
+                    }
+                }).trigger('change');
 
                 improveMultiSelects();
                 improveSelects();
@@ -131,9 +132,17 @@
                                 var dependingStr = ""
                                 if (depends) {
                                     dependingStr = _.filter(_.map(depends.split(' '), s => {
-                                        var obj = $(`select#${s}`);
+                                        var obj = $(`#${s}`);
 
-                                        return obj.val() === null ? "" : `${obj.data("arg")}=${obj.val()}`;
+                                        var value;
+                                        if (obj.prop("tagName") == "SELECT") {
+                                            value = obj.val() || "";
+                                        }
+                                        else if (obj.prop("tagName") == "INPUT" && obj.attr("type") == "checkbox") {
+                                            value = obj.prop("checked");
+                                        }
+
+                                        return `${obj.data("arg")}=${value}`;
                                     }), s => s.length > 0).join('&');
 
                                     if (dependingStr.length > 0) {
@@ -200,7 +209,7 @@
                             prepare(this);
 
                             if (depends) {
-                                _.each(depends.split(' '), s => $(`select#${s}`).change(() => prepare(this)));
+                                _.each(depends.split(' '), s => $(`#${s}`).change(() => prepare(this)));
                             }
                         });
 
@@ -209,7 +218,7 @@
                             for (i = 0; i < args.length; i++) {
                                 var key = args[i];
                                 var realKey = realArgs[i];
-                                var value = $(`#${id} select[data-arg=${key}]`).val();
+                                var value = $(`#${id} select[data-arg=${key}]`).val() || "";
 
                                 if (i > 0) {
                                     argStr += '&';
@@ -218,42 +227,46 @@
                                     argStr += `${realKey}=` + value.join(`&${realKey}=`);
                                 }
                                 else {
-                                    argStr += `${realKey}=${encodeURI(value)}`;
+                                    argStr += `${realKey}=${value}`;
                                 }
                             }
 
                             return argStr
                         }
 
-                        function getAction(selector, func) {
-                            var target = $(selector).data("target") || "func";
+                        function getAction(obj, func) {
+                            var target = obj.data("target") || "func";
 
                             return () => {
+                                var opponent = $("#pergame_info_opponent").val() || "";
+                                var date = $("#pergame_info_date").val();
+
                                 var perGameStr = globalPerGame && perGame ? `_opponent=${opponent}&_date=${date}&` : "";
                                 var argStr = getArgStr();
                                 cachedJSON(`http://${host}/${dataID}/${target}?${perGameStr}${argStr}`, func)
                             };
                         }
 
-                        function init(obj) {
+                        function init(elem) {
                             if (notReady > 0) {
-                                setTimeout(() => init(obj), 400);
+                                setTimeout(() => init(elem), 400);
 
                                 return;
                             }
 
-                            if ($(obj).visible(true)) {
-                                load(obj);
+                            if ($(elem).visible(true)) {
+                                load(elem);
                             }
                             else {
-                                loadMap.set(obj, () => load(obj));
+                                loadMap.set(elem, () => load(elem));
                             }
                         }
 
-                        function load(obj) {
-                            if ($(obj).has(".vis-text").length > 0) {
-                                var action = getAction(`#${id} .vis-text`, function(response) {
-                                    var textObj = $(`#${id} .vis-text`);
+                        function load(elem) {
+                            $(elem).find(".vis-text").each(function() {
+                                var textObj = $(this);
+
+                                var action = getAction(textObj, response => {
                                     textObj.addClass("updated");
                                     setTimeout(() => textObj.removeClass("updated"), 400);
 
@@ -265,14 +278,16 @@
                                     $('#pergame_info_date').change(action);
                                 }
                                 action();
-                            }
+                            });
 
-                            if ($(obj).has(".vis-figure").length > 0) {
-                                cachedJSON(`vis/${dataID}.json`, function(response) {
+                            $(elem).find(".vis-figure").each(function() {
+                                var figureObj = $(this);
+
+                                cachedJSON(`vis/${dataID}.json`, response => {
                                     var spec = response;
 
-                                    var action = getAction(`#${id} .vis-figure`, function(response) {
-                                        visualize(`#${id} .vis-figure`, spec, response.data);
+                                    var action = getAction(figureObj, response => {
+                                        visualize(this, spec, response.data);
                                     });
 
                                     $(`#${id} select`).change(action);
@@ -281,14 +296,13 @@
                                     }
                                     action();
                                 });
-                            }
+                            });
 
-                            if ($(obj).has(".vis-table").length > 0) {
+                            $(elem).find(".vis-table").each(function() {
+                                var tableObj = $(this);
                                 var table = null;
 
-                                var action = getAction(`#${id} .vis-table`, function(response) {
-                                    var tableObj = $(`#${id} .vis-table`);
-
+                                var action = getAction(tableObj, response => {
                                     if (table) {
                                         table.destroy();
                                         tableObj.empty();
@@ -322,7 +336,7 @@
                                     $('#pergame_info_date').change(action);
                                 }
                                 action();
-                            }
+                            });
                         }
 
                         init(this);
@@ -356,7 +370,7 @@
                     <tr>
                         <td style="width: 400px; text-align: right">
                             <h1>
-                                <span class="country">Canada</span>
+                                Canada
                             </h1>
                         </td>
                         <td style="width: 200px; text-align: center">
@@ -364,9 +378,10 @@
                                 v.s.
                             </h3>
                         </td>
-                        <td style="width: 400px">
+                        <td style="width: 400px; text-align: left">
                             <h1>
-                                <select id="pergame_info_opponent" class="country form-control" data-arg="opponent"></select>
+                                <select id="pergame_info_opponent" data-arg="opponent" data-depends="pergame_info_date_flag"></select>
+                                <span class="vis-text" id="pergame_info_opponent_status" data-target="func_opponent"></span>
                             </h1>
                         </td>
                     </tr>
@@ -378,10 +393,11 @@
                         </td>
                         <td>
                         </td>
-                        <td>
+                        <td style="text-align: left">
                             <h3>
-                                <select id="pergame_info_date" class="form-control input-sm" data-arg="date" data-depends="pergame_info_opponent" data-key="nolabel" data-default="-1"></select>
+                                <select id="pergame_info_date" class="input-sm" data-arg="date" data-depends="pergame_info_opponent pergame_info_date_flag" data-key="nolabel" data-default="-1"></select>
                             </h3>
+                            <label><input id="pergame_info_date_flag" type="checkbox" data-arg="all_team"> All Teams</input></label>
                         </td>
                     </tr>
                 </table>

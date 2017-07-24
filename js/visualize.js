@@ -1,5 +1,5 @@
-function visualize(selector, spec, data) {
-    var chart = echarts.init($(selector)[0]);
+function visualize(elem, spec, data) {
+    var chart = echarts.init(elem);
     var ecSpec = spec.spec;
     var type = spec.type;
     var stack = spec.stack;
