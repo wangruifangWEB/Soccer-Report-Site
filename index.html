@@ -35,9 +35,12 @@
         <script src='js/visualize.js'></script>
 
         <script type="text/javascript">
+            var alertTimeout = null;
             function cachedJSON(url, func) {
                 var response;
                 if (!localStorage.getItem(url)) {
+                    $('#syncAlert').fadeIn();
+
                     $.getJSON(url, response => {
                         localStorage.setItem(url, JSON.stringify(response));
 
@@ -46,7 +49,12 @@
                         () => $('#offlineAlert').fadeOut()
                     ).fail(
                         () => $('#offlineAlert').fadeIn()
-                    );
+                    ).always(() => {
+                        if (alertTimeout) {
+                            clearTimeout(alertTimeout);
+                        }
+                        alertTimeout = setTimeout(() => $('#syncAlert').fadeOut(), 1000);
+                    });
                 } else {
                     response = JSON.parse(localStorage.getItem(url));
                     func(response);
@@ -79,8 +87,6 @@
                 if (!Cookies.get('cached')) {
                     localStorage.clear();
                     Cookies.set('cached', 'true', {expires: 7});
-                    $('#syncAlert').fadeIn();
-                    setTimeout(() => $('#syncAlert').fadeOut(), 10000);
                 }
 
                 $("#refresh button").click(function() {
