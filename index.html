@@ -30,37 +30,12 @@
         <link rel="stylesheet" type="text/css" href="css/main.css">
 
         <script src='js/aux.js'></script>
-        <script src='js/multiselect.js'></script>
+        <script src='js/cache.js'></script>
         <script src='js/select.js'></script>
+        <script src='js/load.js'></script>
         <script src='js/visualize.js'></script>
 
         <script type="text/javascript">
-            var alertTimeout = null;
-            function cachedJSON(url, func) {
-                var response;
-                if (!localStorage.getItem(url)) {
-                    $('#syncAlert').fadeIn();
-
-                    $.getJSON(url, response => {
-                        localStorage.setItem(url, JSON.stringify(response));
-
-                        func(response);
-                    }).done(
-                        () => $('#offlineAlert').fadeOut()
-                    ).fail(
-                        () => $('#offlineAlert').fadeIn()
-                    ).always(() => {
-                        if (alertTimeout) {
-                            clearTimeout(alertTimeout);
-                        }
-                        alertTimeout = setTimeout(() => $('#syncAlert').fadeOut(), 1000);
-                    });
-                } else {
-                    response = JSON.parse(localStorage.getItem(url));
-                    func(response);
-                }
-            }
-
             $(document).ready(function() {
                 var uri = URI(window.location.href);
                 var globalPerGame = uri.query(true).pergame == 'true';
@@ -97,7 +72,7 @@
                 var loadMap = new Map();
                 $(window).scroll(() => {
                     for (var [obj, f] of loadMap.entries()) {
-                        if ($(obj).visible(true)) {
+                        if (obj.visible(true)) {
                             loadMap.delete(obj);
                             f();
                         }
@@ -134,21 +109,13 @@
 
                             var depends = $(this).data("depends");
 
-                            function prepare(selectElem) {
+                            function prepare(selectObj) {
                                 var dependingStr = ""
                                 if (depends) {
                                     dependingStr = _.filter(_.map(depends.split(' '), s => {
                                         var obj = $(`#${s}`);
 
-                                        var value;
-                                        if (obj.prop("tagName") == "SELECT") {
-                                            value = obj.val() || "";
-                                        }
-                                        else if (obj.prop("tagName") == "INPUT" && obj.attr("type") == "checkbox") {
-                                            value = obj.prop("checked");
-                                        }
-
-                                        return `${obj.data("arg")}=${value}`;
+                                        return `${obj.data("arg")}=${getObjectValue(obj)}`;
                                     }), s => s.length > 0).join('&');
 
                                     if (dependingStr.length > 0) {
@@ -158,87 +125,25 @@
 
                                 cachedJSON(`http://${host}/${dataID}/${argName}${dependingStr}`, response => {
                                     if (depends) {
-                                        $(selectElem).addClass("updated");
-                                        setTimeout(() => $(selectElem).removeClass("updated"), 400);
+                                        selectObj.addClass("updated");
+                                        setTimeout(() => selectObj.removeClass("updated"), 400);
                                     }
 
-                                    var list = response.data;
-                                    var options = "";
+                                    var key = selectObj.data("key");
 
-                                    var key = $(selectElem).data("key");
-
-                                    if (!key) {
-                                        _.each(list, o => {
-                                            options += `<option value="${o}">${o}</option>`;
-                                        });
-                                    }
-                                    else {
-                                        _.each(_.filter(list, o => !o.key), o => {
-                                            options += `<option value="${o.value}">${o.value}</option>`;
-                                        });
-
-                                        _.each(_.groupBy(_.filter(list, o => o.key), o => o.key), (l, g) => {
-                                            options += `<optgroup label="${g}">`;
-
-                                            _.each(l, o => {
-                                                options += `<option value="${o.value}">${o.value}</option>`;
-                                            });
-
-                                            options += `</optgroup>`;
-                                        });
-                                    }
-
-                                    $(selectElem).html(options);
-                                    var defaultPos = parseInt($(selectElem).data("default"));
-                                    if (!defaultPos) {
-                                        if ($(selectElem).prop("multiple")) {
-                                            $(selectElem).find(`option`).prop("selected", true);
-                                        }
-                                        else {
-                                            $(selectElem).find(`option:first-of-type`).prop("selected", true);
-                                        }
-                                    }
-                                    else {
-                                        if (!key) {
-                                            $(selectElem).find(`option:nth-${defaultPos >= 0 ? '' : 'last-'}of-type(${Math.abs(defaultPos)})`).prop("selected", true);
-                                        }
-                                        else {
-                                            $(selectElem).find(`optgroup:nth-${defaultPos >= 0 ? '' : 'last-'}of-type(${Math.abs(defaultPos)}) > option:first-of-type`).prop("selected", true);
-                                        }
-                                    }
-                                    $(selectElem).trigger("change");
+                                    selectObj.html(getOptionsHTML(response.data, key));
+                                    setDefaultPos(selectObj, parseInt(selectObj.data("default")), key);
+                                    selectObj.trigger("change");
 
                                     notReady -= 1;
                                 });
                             }
 
-                            prepare(this);
-
+                            prepare($(this));
                             if (depends) {
-                                _.each(depends.split(' '), s => $(`#${s}`).change(() => prepare(this)));
+                                _.each(depends.split(' '), s => $(`#${s}`).change(() => prepare($(this))));
                             }
                         });
-
-                        function getArgStr() {
-                            var argStr = "";
-                            for (i = 0; i < args.length; i++) {
-                                var key = args[i];
-                                var realKey = realArgs[i];
-                                var value = $(`#${id} select[data-arg=${key}]`).val() || "";
-
-                                if (i > 0) {
-                                    argStr += '&';
-                                }
-                                if (Array.isArray(value)) {
-                                    argStr += `${realKey}=` + value.join(`&${realKey}=`);
-                                }
-                                else {
-                                    argStr += `${realKey}=${value}`;
-                                }
-                            }
-
-                            return argStr
-                        }
 
                         function getAction(obj, func) {
                             var target = obj.data("target") || "func";
@@ -248,94 +153,30 @@
                                 var date = $("#pergame_info_date").val();
 
                                 var perGameStr = globalPerGame && perGame ? `_opponent=${opponent}&_date=${date}&` : "";
-                                var argStr = getArgStr();
-                                cachedJSON(`http://${host}/${dataID}/${target}?${perGameStr}${argStr}`, func)
+                                var argStr = getArgStr(_.zip(
+                                    realArgs,
+                                    _.map(args, arg => $(`#${id} select[data-arg=${arg}]`).val() || "")
+                                ));
+
+                                var loadFunc = () => cachedJSON(`http://${host}/${dataID}/${target}?${perGameStr}${argStr}`, func);
+                                if (obj.visible(true)) {
+                                    loadFunc();
+                                }
+                                else {
+                                    loadMap.set(obj, loadFunc);
+                                }
                             };
                         }
 
-                        function init(elem) {
+                        function init(obj) {
                             if (notReady > 0) {
-                                setTimeout(() => init(elem), 400);
+                                setTimeout(() => init(obj), 400);
 
                                 return;
                             }
 
-                            if ($(elem).visible(true)) {
-                                load(elem);
-                            }
-                            else {
-                                loadMap.set(elem, () => load(elem));
-                            }
-                        }
-
-                        function load(elem) {
-                            $(elem).find(".vis-text").each(function() {
-                                var textObj = $(this);
-
-                                var action = getAction(textObj, response => {
-                                    textObj.addClass("updated");
-                                    setTimeout(() => textObj.removeClass("updated"), 400);
-
-                                    textObj.html(response.data);
-                                });
-
-                                $(`#${id} select`).change(action);
-                                if (globalPerGame && perGame) {
-                                    $('#pergame_info_date').change(action);
-                                }
-                                action();
-                            });
-
-                            $(elem).find(".vis-figure").each(function() {
-                                var figureObj = $(this);
-
-                                cachedJSON(`vis/${dataID}.json`, response => {
-                                    var spec = response;
-
-                                    var action = getAction(figureObj, response => {
-                                        visualize(this, spec, response.data);
-                                    });
-
-                                    $(`#${id} select`).change(action);
-                                    if (globalPerGame && perGame) {
-                                        $('#pergame_info_date').change(action);
-                                    }
-                                    action();
-                                });
-                            });
-
-                            $(elem).find(".vis-table").each(function() {
-                                var tableObj = $(this);
-                                var table = null;
-
-                                var action = getAction(tableObj, response => {
-                                    if (table) {
-                                        table.destroy();
-                                        tableObj.empty();
-                                    }
-
-                                    var actives = tableObj.data("actives");
-
-                                    table = tableObj.DataTable({
-                                        "data": _.rest(response.data),
-                                        "columns": _.map(response.data[0], v => ({title: v})),
-                                        "displayLength": -1,
-                                        "paging": false,
-                                        "ordering": false,
-                                        "info": false,
-                                        "searching": false,
-                                        "scrollY": true,
-                                        "scrollX": true,
-                                        "scrollCollapse": true,
-                                        "fixedColumns": true
-                                    });
-
-                                    if (actives) {
-                                        _.each(actives.split(' '), p => {
-                                            $(`#${id} .vis-table tbody tr:nth-last-child(${-parseInt(p)})`).addClass('active');
-                                        });
-                                    }
-                                });
+                            load(id, dataID, obj, (visObj, actionFunc) => {
+                                var action = getAction(visObj, actionFunc);
 
                                 $(`#${id} select`).change(action);
                                 if (globalPerGame && perGame) {
@@ -345,7 +186,7 @@
                             });
                         }
 
-                        init(this);
+                        init($(this));
                     });
                 });
             });
