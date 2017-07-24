@@ -1,6 +1,62 @@
+#refresh {
+    position: absolute;
+    margin: 10px;
+    right: 0px;
+}
+
+.alert {
+    padding: 10px;
+    margin: 10px;
+    display: none;
+    position: fixed;
+}
+
 .container {
     max-width: 1000px;
     padding: 0px;
+}
+
+.nav {
+    width: 250px;
+    margin: auto;
+    padding: 10px;
+}
+
+select {
+    background-color: #fff;
+}
+
+select:hover {
+    background-color: #eee;
+}
+
+tr, button, a, input, select, .viz-text {
+    transition: 0.2s;
+}
+
+#pergame_info {
+    text-align: center;
+
+    td {
+        vertical-align: middle;
+
+        h1, h2, h3 {
+            display: inline-block;
+        }
+
+        select {
+            border: none;
+            box-shadow: none;
+            padding: 0px;
+            width: initial;
+            font-size: inherit;
+            height: 100%;
+        }
+
+        .updated {
+            background-color: #dff0d8;
+        }
+    }
 }
 
 .vis {
@@ -41,16 +97,6 @@
     }
 }
 
-#opposition_regular .vis-table, #opposition_pergame .vis-table {
-    th {
-        border: none;
-    }
-
-    tbody {
-        display: none;
-    }
-}
-
 .label {
     pointer-events: none;
     position: relative;
@@ -59,54 +105,12 @@
     right: 18px;
 }
 
-#refresh {
-    position: absolute;
-    margin: 10px;
-    right: 0px;
-}
-
-.alert {
-    padding: 10px;
-    margin: 10px;
-    display: none;
-    position: fixed;
-}
-
-.nav {
-    width: 250px;
-    margin: auto;
-    padding: 10px;
-}
-
-tr, button, a, input, select, .viz-text {
-    transition: 0.2s;
-}
-
-select:hover {
-    background-color: #eee;
-}
-
-#pergame_info {
-    text-align: center;
-
-    h1, h3 {
-        display: inline-block;
-    }
-
-    td {
-        vertical-align: middle;
-    }
-
-    select {
+#opposition_regular .vis-table, #opposition_pergame .vis-table {
+    th {
         border: none;
-        box-shadow: none;
-        padding: 0px;
-        width: initial;
-        font-size: inherit;
-        height: 100%;
     }
 
-    .updated {
-        background-color: #dff0d8;
+    tbody {
+        display: none;
     }
 }
