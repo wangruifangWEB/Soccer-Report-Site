@@ -38,18 +38,13 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 var uri = URI(window.location.href);
-                var globalPerGame = uri.query(true).pergame == 'true';
-                $(`.nav li:nth-child(${!globalPerGame ? 1 : 2})`).addClass("active");
+                var perGame = uri.query(true).pergame == 'true';
+                $(`.nav li:nth-child(${!perGame ? 1 : 2})`).addClass("active");
 
                 $('#pergame_info_date_flag').change(function() {
-                    if ($(this).prop("checked")) {
-                        $('#pergame_info_opponent').hide();
-                        $('#pergame_info_opponent_status').show();
-                    }
-                    else {
-                        $('#pergame_info_opponent').show();
-                        $('#pergame_info_opponent_status').hide();
-                    }
+                    var flag = $(this).prop("checked");
+                    $('#pergame_info_opponent').toggle(!flag);
+                    $('#pergame_info_opponent_status').toggle(flag);
                 }).trigger('change');
 
                 improveMultiSelects();
@@ -57,14 +52,12 @@
 
                 $('[data-toggle="tooltip"]').tooltip();
 
-                $(`.vis[data-pergame="${globalPerGame ? "regular" : "pergame"}"]`).hide();
-
                 if (!Cookies.get('cached')) {
                     localStorage.clear();
                     Cookies.set('cached', 'true', {expires: 7});
                 }
 
-                $("#refresh button").click(function() {
+                $("#refresh button").click(() => {
                     Cookies.remove('cached');
                     location.reload(true);
                 });
@@ -82,16 +75,13 @@
                 cachedJSON("config.json", function(config) {
                     var host = config.host;
 
-                    $(".vis").each(function() {
-                        if (globalPerGame && $(this).data('pergame') == "regular") {
-                            return;
+                    $(".vis").filter(function() {
+                        var flag = $(this).data('pergame') != (perGame ? "regular" : "pergame");
+                        if (!flag) {
+                            $(this).hide();
                         }
-                        if (!globalPerGame && $(this).data('pergame') == "pergame") {
-                            return;
-                        }
-
-                        var perGame = $(this).data('pergame') != "regular";
-
+                        return flag;
+                    }).each(function() {
                         var id = $(this).attr('id');
 
                         var notReady = $(`#${id} select`).length;
@@ -125,8 +115,7 @@
 
                                 cachedJSON(`http://${host}/${dataID}/${argName}${dependingStr}`, response => {
                                     if (depends) {
-                                        selectObj.addClass("updated");
-                                        setTimeout(() => selectObj.removeClass("updated"), 400);
+                                        highlightUpdated(selectObj);
                                     }
 
                                     var key = selectObj.data("key");
@@ -152,7 +141,7 @@
                                 var opponent = $("#pergame_info_opponent").val() || "";
                                 var date = $("#pergame_info_date").val();
 
-                                var perGameStr = globalPerGame && perGame ? `_opponent=${opponent}&_date=${date}&` : "";
+                                var perGameStr = perGame ? `_opponent=${opponent}&_date=${date}&` : "";
                                 var argStr = getArgStr(_.zip(
                                     realArgs,
                                     _.map(args, arg => $(`#${id} select[data-arg=${arg}]`).val() || "")
@@ -179,7 +168,7 @@
                                 var action = getAction(visObj, actionFunc);
 
                                 $(`#${id} select`).change(action);
-                                if (globalPerGame && perGame) {
+                                if (perGame) {
                                     $('#pergame_info_date').change(action);
                                 }
                                 action();

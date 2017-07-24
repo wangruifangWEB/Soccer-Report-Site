@@ -23,3 +23,8 @@ function getArgStr(args) {
 
     return argStr;
 }
+
+function highlightUpdated(obj) {
+    obj.addClass("updated");
+    setTimeout(() => obj.removeClass("updated"), 400);
+}
