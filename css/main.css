@@ -79,3 +79,6 @@ tr, button, a, input, select, .viz-text {
   border: none; }
 #opposition_regular .vis-table tbody, #opposition_pergame .vis-table tbody {
   display: none; }
+
+.hovered {
+  background-color: yellow; }

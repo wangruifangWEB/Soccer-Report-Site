@@ -56,6 +56,25 @@ function loadTable(id, dataID, obj, subscribe) {
                     $(`#${id} .vis-table tbody tr:nth-last-child(${-parseInt(p)})`).addClass('active');
                 });
             }
+
+            $(this).children('tbody').children('tr').on({
+                mouseenter: function () {
+                    trIndex = $(this).index()+1;
+                    $("table.dataTable").each(function(index) {
+                        $(this).find("tr:eq("+trIndex+")").each(function(index) {
+                            $(this).find("td").addClass("hovered");
+                        });
+                    });
+                },
+                mouseleave: function () {
+                    trIndex = $(this).index()+1;
+                    $("table.dataTable").each(function(index) {
+                        $(this).find("tr:eq("+trIndex+")").each(function(index) {
+                            $(this).find("td").removeClass("hovered");
+                        });
+                    });
+                }
+            });
         });
     });
 }
