@@ -43,8 +43,8 @@
 
                 $('#pergame_info_date_flag').change(function() {
                     var flag = $(this).prop("checked");
-                    $('#pergame_info_opponent').toggle(!flag);
-                    $('#pergame_info_opponent_status').toggle(flag);
+                    $('#pergame_info_opponent').toggle(flag);
+                    $('#pergame_info_opponent_status').toggle(!flag);
                 }).trigger('change');
 
                 improveMultiSelects();
@@ -233,7 +233,7 @@
                             <h3>
                                 <select id="pergame_info_date" class="input-sm" data-arg="date" data-depends="pergame_info_opponent pergame_info_date_flag" data-key="nolabel" data-default="-1"></select>
                             </h3>
-                            <label><input id="pergame_info_date_flag" type="checkbox" data-arg="all_team"> All Teams</input></label>
+                            <label><input id="pergame_info_date_flag" type="checkbox" data-arg="curr_team" checked> Current Team</input></label>
                         </td>
                     </tr>
                 </table>
@@ -399,8 +399,9 @@
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
+                            <label>(<input id="player_analysis_graph_control_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date" data-key="nolabel" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date player_analysis_graph_control_players_flag" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -425,8 +426,9 @@
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
+                            <label>(<input id="player_analysis_graph_process_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date" data-key="nolabel" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date player_analysis_graph_process_players_flag" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -451,8 +453,9 @@
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
+                            <label>(<input id="player_analysis_graph_outcome_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date" data-key="nolabel" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date player_analysis_graph_outcome_players_flag" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -477,8 +480,9 @@
                                 <select class="form-control input-sm" data-arg="podium_op"></select>
                                 <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
                             </div>
+                            <label>(<input id="player_analysis_graph_final_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Players</label>
-                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date" data-key="nolabel" size="10" multiple></select>
+                            <select class="form-control input-sm" data-arg="players" data-depends="pergame_info_opponent pergame_info_date player_analysis_graph_final_players_flag" data-key="nolabel" size="10" multiple></select>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
                             <label>Positions</label>
@@ -498,8 +502,9 @@
                         <td>
                             <label>Control Measure</label>
                             <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
+                            <label>(<input id="pass_completion_control_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date" data-key="label" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date pass_completion_control_players_flag" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -515,8 +520,9 @@
                         <td>
                             <label>Process Measure</label>
                             <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
+                            <label>(<input id="pass_completion_process_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date" data-key="label" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date pass_completion_process_players_flag" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -532,8 +538,9 @@
                         <td>
                             <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure_first" data-realarg="measure" data-default="7"></select>
+                            <label>(<input id="pass_completion_outcome_first_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date" data-key="label" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date pass_completion_outcome_first_players_flag" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
@@ -549,8 +556,9 @@
                         <td>
                             <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure_second" data-realarg="measure" data-default="3"></select>
+                            <label>(<input id="pass_completion_outcome_second_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Player</label>
-                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date" data-key="label" data-default="3"></select>
+                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date pass_completion_outcome_second_players_flag" data-key="label" data-default="3"></select>
                         </td>
                     </tr>
                 </table>
