@@ -75,6 +75,31 @@ function loadTable(id, dataID, obj, subscribe) {
                     });
                 }
             });
+
+            obj.find(".DTFC_Cloned").each(function() {
+                var clonedColObj = $(this);
+
+                subscribe(clonedColObj, response => {
+                    $(this).children('tbody').children('tr').on({
+                        mouseenter: function () {
+                            trIndex = $(this).index()+1;
+                            $("table.dataTable").each(function(index) {
+                                $(this).find("tr:eq("+trIndex+")").each(function(index) {
+                                    $(this).find("td").addClass("hovered");
+                                });
+                            });
+                        },
+                        mouseleave: function () {
+                            trIndex = $(this).index()+1;
+                            $("table.dataTable").each(function(index) {
+                                $(this).find("tr:eq("+trIndex+")").each(function(index) {
+                                    $(this).find("td").removeClass("hovered");
+                                });
+                            });
+                        }
+                    });
+                });
+            });
         });
     });
 }
