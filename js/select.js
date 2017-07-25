@@ -60,15 +60,11 @@ function getOptionsHTML(list, key) {
         });
     }
     else {
-        _.each(_.filter(list, o => !o.key), o => {
-            options += `<option value="${o.value}">${o.value}</option>`;
-        });
-
         _.each(_.groupBy(_.filter(list, o => o.key), o => o.key), (l, g) => {
             options += `<optgroup label="${g}">`;
 
             _.each(l, o => {
-                options += `<option value="${o.value}">${o.value}</option>`;
+                options += `<option value="${o.value}">${o.value}${o.active || o.active === undefined ? '' : ' ✗'}</option>`;
             });
 
             options += `</optgroup>`;
