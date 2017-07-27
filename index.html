@@ -40,6 +40,7 @@
                 var uri = URI(window.location.href);
                 var perGame = uri.query(true).pergame == 'true';
                 $(`.nav li:nth-child(${!perGame ? 1 : 2})`).addClass("active");
+                $('.podiumSelect').toggle(!perGame);
 
                 $('#pergame_info_date_flag').change(function() {
                     var flag = $(this).prop("checked");
@@ -314,10 +315,12 @@
                         <td>
                             <label>Control Measure</label>
                             <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
-                            <label>Podium Threat</label>
-                            <div class="form-inline">
-                                <select class="form-control input-sm" data-arg="podium_op"></select>
-                                <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                            <div class="podiumSelect">
+                                <label>Podium Threat</label>
+                                <div class="form-inline">
+                                    <select class="form-control input-sm" data-arg="podium_op"></select>
+                                    <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -334,10 +337,12 @@
                         <td>
                             <label>Process Measure</label>
                             <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="5"></select>
-                            <label>Podium Threat</label>
-                            <div class="form-inline">
-                                <select class="form-control input-sm" data-arg="podium_op"></select>
-                                <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                            <div class="podiumSelect">
+                                <label>Podium Threat</label>
+                                <div class="form-inline">
+                                    <select class="form-control input-sm" data-arg="podium_op"></select>
+                                    <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -354,10 +359,12 @@
                         <td>
                             <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure" data-realarg="measure" data-default="12"></select>
-                            <label>Podium Threat</label>
-                            <div class="form-inline">
-                                <select class="form-control input-sm" data-arg="podium_op"></select>
-                                <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                            <div class="podiumSelect">
+                                <label>Podium Threat</label>
+                                <div class="form-inline">
+                                    <select class="form-control input-sm" data-arg="podium_op"></select>
+                                    <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -374,10 +381,12 @@
                         <td>
                             <label>Final Acts Quality Measure</label>
                             <select class="form-control input-sm" data-arg="final_measure" data-realarg="measure" data-default="3"></select>
-                            <label>Podium Threat</label>
-                            <div class="form-inline">
-                                <select class="form-control input-sm" data-arg="podium_op"></select>
-                                <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                            <div class="podiumSelect">
+                                <label>Podium Threat</label>
+                                <div class="form-inline">
+                                    <select class="form-control input-sm" data-arg="podium_op"></select>
+                                    <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -394,10 +403,12 @@
                         <td>
                             <label>Control Measure</label>
                             <select class="form-control input-sm" data-arg="control_measure" data-realarg="measure" data-default="2"></select>
-                            <label>Podium Threat</label>
-                            <div class="form-inline">
-                                <select class="form-control input-sm" data-arg="podium_op"></select>
-                                <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                            <div class="podiumSelect">
+                                <label>Podium Threat</label>
+                                <div class="form-inline">
+                                    <select class="form-control input-sm" data-arg="podium_op"></select>
+                                    <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                                </div>
                             </div>
                             <label>(<input id="player_analysis_graph_control_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Players</label>
@@ -421,10 +432,12 @@
                         <td>
                             <label>Process Measure</label>
                             <select class="form-control input-sm" data-arg="process_measure" data-realarg="measure" data-default="3"></select>
-                            <label>Podium Threat</label>
-                            <div class="form-inline">
-                                <select class="form-control input-sm" data-arg="podium_op"></select>
-                                <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                            <div class="podiumSelect">
+                                <label>Podium Threat</label>
+                                <div class="form-inline">
+                                    <select class="form-control input-sm" data-arg="podium_op"></select>
+                                    <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                                </div>
                             </div>
                             <label>(<input id="player_analysis_graph_process_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Players</label>
@@ -448,10 +461,12 @@
                         <td>
                             <label>Outcome Measure</label>
                             <select class="form-control input-sm" data-arg="outcome_measure" data-realarg="measure" data-default="12"></select>
-                            <label>Podium Threat</label>
-                            <div class="form-inline">
-                                <select class="form-control input-sm" data-arg="podium_op"></select>
-                                <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                            <div class="podiumSelect">
+                                <label>Podium Threat</label>
+                                <div class="form-inline">
+                                    <select class="form-control input-sm" data-arg="podium_op"></select>
+                                    <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                                </div>
                             </div>
                             <label>(<input id="player_analysis_graph_outcome_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Players</label>
@@ -475,10 +490,12 @@
                         <td>
                             <label>Final Acts Quality Measure</label>
                             <select class="form-control input-sm" data-arg="final_measure" data-realarg="measure" data-default="3"></select>
-                            <label>Podium Threat</label>
-                            <div class="form-inline">
-                                <select class="form-control input-sm" data-arg="podium_op"></select>
-                                <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                            <div class="podiumSelect">
+                                <label>Podium Threat</label>
+                                <div class="form-inline">
+                                    <select class="form-control input-sm" data-arg="podium_op"></select>
+                                    <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                                </div>
                             </div>
                             <label>(<input id="player_analysis_graph_final_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
                             <label>Players</label>
@@ -574,10 +591,12 @@
                             </div>
                         </td>
                         <td>
-                            <label>Podium Threat</label>
-                            <div class="form-inline">
-                                <select class="form-control input-sm" data-arg="podium_op"></select>
-                                <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                            <div class="podiumSelect">
+                                <label>Podium Threat</label>
+                                <div class="form-inline">
+                                    <select class="form-control input-sm" data-arg="podium_op"></select>
+                                    <select class="form-control input-sm" data-arg="podium" data-default="5"></select>
+                                </div>
                             </div>
                             <label>Minutes Played</label>
                             <select class="form-control input-sm" data-arg="minutes" size="6" multiple></select>
