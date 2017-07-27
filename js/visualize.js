@@ -89,6 +89,21 @@ function visualize(elem, spec, data) {
             data: _.map(data, r => r[spec.rowField])
         };
     }
+    else if ("donutsField" in spec) {
+        ecSpec.series.data = _.map(data, r => r[spec.yField]);
+
+        ecSpec.series.type = type;
+
+        ecSpec.series.radius = "55%";
+
+        ecSpec.series.center = ['50%', '60%'];
+
+        ecSpec.tooltip.trigger = "item";
+
+        ecSpec.legend = {
+            data: _.map(data, r => r[spec.donutsField])
+        };
+    }
     else {
         ecSpec.xAxis.data = _.uniq(
             _.map(

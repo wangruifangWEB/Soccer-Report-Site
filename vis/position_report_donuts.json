@@ -1,0 +1,11 @@
+{
+    "spec": {
+        "tooltip" : {},
+        "series": [],
+        "legend": [],
+        "grid": {}
+    },
+    "valueField": "score",
+    "donutsField": "Match Identfier",
+    "type": "pie"
+}

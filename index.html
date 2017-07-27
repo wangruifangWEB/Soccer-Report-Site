@@ -606,6 +606,25 @@
                     </tr>
                 </table>
             </div>
+
+            <div class="vis" id="pass_completion_donuts" data-id="pass_completion" data-pergame="both">
+                <h3>Player Trends - Donuts</h3>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="vis-figure"></div>
+                        </td>
+                        <td>
+                            <label>Outcome Measure</label>
+                            <select class="form-control input-sm" data-arg="outcome_measure_second" data-realarg="measure" data-default="3"></select>
+                            <label>(<input id="pass_completion_outcome_second_players_flag" type="checkbox" data-arg="active_players" checked> Active</input>)</label>
+                            <label>Player</label>
+                            <select class="form-control input-sm" data-arg="player" data-depends="pergame_info_opponent pergame_info_date pass_completion_outcome_second_players_flag" data-key="label" data-default="3"></select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
         </div>
     </body>
 </html>
