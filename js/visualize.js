@@ -90,18 +90,22 @@ function visualize(elem, spec, data) {
         };
     }
     else if ("donutsField" in spec) {
-        ecSpec.series.data = _.map(data, r => r[spec.yField]);
+        ecSpec.series = [{
+            data: data,
+            type: type,
+            radius: ["45%", "60%"],
+            center: ['50%', '60%']
+        }];
 
-        ecSpec.series.type = type;
-
-        ecSpec.series.radius = "55%";
-
-        ecSpec.series.center = ['50%', '60%'];
-
-        ecSpec.tooltip.trigger = "item";
+        ecSpec.tooltip = {
+            trigger: "item",
+            formatter: "{b} : {c} ({d}%)"
+        }
 
         ecSpec.legend = {
-            data: _.map(data, r => r[spec.donutsField])
+            data: _.map(data, r => r[spec.donutsField]),
+            orient: "vertical",
+            x: "left"
         };
     }
     else {
